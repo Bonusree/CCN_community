@@ -5,6 +5,67 @@
 {% endblock %}
 
 {% block content %}
+<div class="m-3">
+  <input class="border-2 m-3" style="width: 30%;" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for blood group..">
+<table class="table table-success table-striped m-3" id="myTable" style="width: 98%;">
+  <thead>
+      <tr>
+        <th>Name</th>
+        <th>Blood Group</th>
+        <th>Location</th>
+        <th>Last Donation Time</th>
+        <th>Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John</td>
+        <td>A-</td>
+        <td>ranirbajar</td>
+        <td>ranirbajar</td>
+        <td>ranirbajar</td>
+      </tr>
+      <tr>
+        <td>Aohn</td>
+        <td>B+</td>
+        <td>ranirbajar</td>
+        <td>ranirbajar</td>
+        <td>ranirbajar</td>
+      </tr>
+      <tr>
+        <td>bohn</td>
+        <td>A+</td>
+        <td>ranirbajar</td>
+        <td>ranirbajar</td>
+        <td>ranirbajar</td>
+      </tr>
+    </tbody>
+</table>
 
+
+<script>
+  function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
     
+      tbody = table.getElementsByTagName("tbody")[0];
+      tr = tbody.getElementsByTagName("tr");
+
+      // Loop through all table rows, and hide those that don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1]; // Second column contains blood group
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
 {% endblock %}
