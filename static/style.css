@@ -1,0 +1,12 @@
+.active {
+    border-bottom: 2px solid rgb(4, 135, 76);
+  }
+.acadedmic_nav_color
+{
+    background-color: rgb(167, 200, 229);
+}
+.col_color
+{
+    background-color: rgb(238, 218, 218);
+    height: 1000px;  
+}
