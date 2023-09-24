@@ -14,3 +14,9 @@ def blood_community(request):
 
 def show_alumni(request):
     return render(request,'alumni.html')
+
+def login_view(request):
+    return render(request,'login.html')
+
+def signup(request):
+    return render(request,'signup.html')
