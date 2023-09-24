@@ -11,3 +11,6 @@ def Routine(request):
     return render(request, 'routine.html')
 def blood_community(request):
     return render(request, 'blood_community.html')
+
+def show_alumni(request):
+    return render(request,'alumni.html')
