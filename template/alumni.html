@@ -1,0 +1,54 @@
+{% extends "master.html" %}
+
+{% block title %}
+CCN community
+{% endblock %}
+
+{% block content %}
+<div class="m-3">
+    <div class="row m-3">
+        <select class="col-3 mx-2" name="searchOption">
+            <option>Select</option>
+            <option value="session">Session</option>
+            <option value="department">Department</option>
+        </select>
+        <input class="col-3 mx-2" placeholder="Search here ..." name="searchKey" id="searchKey" onkeyup="updateTable()">
+    </div>
+    <table class="table table-success table-striped m-3 table-hover m-auto" id="myTable"
+        style="width: 98%;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Session</th>
+                <th>Department</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>John</td>
+                <td>2017-2018</td>
+                <td>CSE</td>
+                <td>example@example.com</td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>2018-2019</td>
+                <td>CSE</td>
+                <td>example@example.com</td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>2015-2016</td>
+                <td>CSE</td>
+                <td>example@example.com</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+  function myFunction() {
+    
+    }
+  </script>
+{% endblock %}
