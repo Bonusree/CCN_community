@@ -21,7 +21,8 @@ def blood_community(request):
     return render(request, 'blood_community.html')
 
 def show_alumni(request):
-    return render(request,'alumni.html')
+    all_alumni = User_Details.objects.filter(isAlumni=True)
+    return render(request,'alumni.html',{'all_alumni':all_alumni})
 
 def login_view(request):
     if request.method=='POST':

@@ -1,14 +1,16 @@
 {% extends "master.html" %}
 
 {% block title %}
-  CCN community
+CCN community
 {% endblock %}
 
 {% block content %}
 <div class="m-3">
-  <input class="border-2 m-3" style="width: 30%;" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for blood group..">
-<table class="table table-success table-striped m-3" id="myTable" style="width: 98%;">
-  <thead>
+  <input class="border-2 m-3" style="width: 30%;" type="text" id="myInput"
+    onkeyup="myFunction()" placeholder="Search for blood group..">
+  <table class="table table-success table-striped m-3" id="myTable"
+    style="width: 98%;">
+    <thead>
       <tr>
         <th>Name</th>
         <th>Blood Group</th>
@@ -40,10 +42,10 @@
         <td>ranirbajar</td>
       </tr>
     </tbody>
-</table>
+  </table>
+</div>
 
-
-<script>
+  <script>
   function myFunction() {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue;
@@ -68,4 +70,4 @@
       }
     }
   </script>
-{% endblock %}
+  {% endblock %}
