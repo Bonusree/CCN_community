@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
-from .models import User_Details
+from .models import User_Details, Blood
 
 # Create your views here.
 def home(request):
@@ -18,7 +18,8 @@ def Academic(request):
 def Routine(request):
     return render(request, 'routine.html')
 def blood_community(request):
-    return render(request, 'blood_community.html')
+    bloods = Blood.objects.all()
+    return render(request, 'blood_community.html',{'bloods':bloods})
 
 def show_alumni(request):
     all_alumni = User_Details.objects.filter(isAlumni=True)
@@ -28,8 +29,6 @@ def login_view(request):
     if request.method=='POST':
         username = request.POST['username']
         password = request.POST['password']
-        
-        print("----------------",username,password)
         
         user = authenticate(request, username=username, password=password)
         
@@ -86,11 +85,14 @@ def profile(request):
         profession = True if(profession=='1') else False
         profession_details = request.POST['profession_details']
         address = request.POST['address']
+        blood_group = request.POST['blood_group']
+        last_donate = request.POST['last_donate']
+        phone = request.POST['phone']
         
-        print(fullname,dept,session,profession,profession_details)
         user = User.objects.get(username=request.user.username)
         if user:
-            _user = User_Details.objects.get(user=user)
+            # update user details 
+            _user, created = User_Details.objects.get_or_create(user=user)
             _user.fullName=fullname
             _user.department=dept
             _user.session=session
@@ -99,11 +101,19 @@ def profile(request):
             _user.isAlumni=profession
             _user.address=address
             _user.save()
+            
+            # update blood information 
+            _blood , created= Blood.objects.get_or_create(user=user)
+            _blood.blood_group = blood_group
+            _blood.last_donate = last_donate
+            _blood.phone = phone
+            _blood.save()
         
     try:
         user = User.objects.get(username=request.user.username)
         details = User_Details.objects.get(user=user)
-        context={'details':details}
+        blood = Blood.objects.get(user=user)
+        context={'details':details,'blood':blood}
     except User.DoesNotExist:
         user_details = None
         context={'type':'bg-info','message':'User not found'}

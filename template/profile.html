@@ -11,11 +11,17 @@
     margin: 0 auto;
 }
 .profile-picture {
-    text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Create two columns with equal width */
 }
 .profile-picture img {
     max-width: 150px;
     border-radius: 50%;
+}
+
+
+.profile-picture-edit i {
+    color: #333; /* Icon color */
 }
 
 .inputGroup{
@@ -25,7 +31,7 @@
 .profile-info label {
     font-weight: bold;
 }
-.profile-info input[type="text"], .profile-info input[type="email"] {
+.profile-info input[type="text"],input[type="email"],input[type="date"], select, textarea {
     width: 100%;
     padding: 5px;
     margin-bottom: 10px;
@@ -36,7 +42,17 @@
 </style>
 <div class="profile">
   <div class="profile-picture">
-      <img src="{% static 'img/User-Profile.png' %}" alt="Profile Picture">
+      <div class="text-start d-flex align-items-center">
+        <b class="mx-2">{{ details.fullName }}</b> 
+        <b class="d-flex justify-content-center align-items-center" style="aspect-ratio: 1; width: 30px; border:1px solid rgb(69, 69, 68); border-radius: 50%;" title="contribution">10</b>
+      </div>
+      <div class=".profile-picture-container text-center">
+        <img src="{% static 'img/User-Profile.png' %}" alt="Profile Picture">
+        <label class="">
+          <!-- <a href="#" style="color:black"> -->
+          <i class="fas fa-trash"></i>
+        </label>
+      </div>
   </div>
   <form action="{% url 'profile' %}" method="POST">
     {% csrf_token %}
@@ -83,13 +99,36 @@
     
     <div class="inputGroup">
       <label for="profession">Profession details (for alumni):</label>
-      <textarea type="text" name="profession_details" id="profession" style="width: 100%;" rows=3>{% if details.profession and details.isAlumni and details.isAlumni == True %}{{details.profession}}{% endif %}</textarea>
+      <textarea type="text" name="profession_details" id="profession" rows=3>{% if details.profession and details.isAlumni and details.isAlumni == True %}{{details.profession}}{% endif %}</textarea>
     </div>
 
     <div class="inputGroup">
       <label for="address">Address:</label>
-      <textarea type="text" name="address" id="address" style="width: 100%;" rows=3>{% if details.address %}{{details.address}}{% endif %}</textarea>
+      <textarea type="text" name="address" id="address" rows=3>{% if details.address %}{{details.address}}{% endif %}</textarea>
     </div>
+    
+    <div class="inputGroup">
+      <label for="phone">Phone:</label>
+      <input type="text" name="phone" id="phone" value="{% if blood.phone %}{{blood.phone}}{% endif %}">
+    </div>
+    
+    <div class="inputGroup">
+      <label for="address">Blood Group:</label>
+      <select name="blood_group">
+        <option {% if not blood.blood_group %}selected{% endif %}>Select</option>
+        <option value="A_p" {% if blood.blood_group == 'A_p' %}selected{% endif %}>A+</option>
+        <option value="A_n" {% if blood.blood_group == 'A_n' %}selected{% endif %}>A-</option>
+        <option value="B_p" {% if blood.blood_group == 'B_p' %}selected{% endif %}>B+</option>
+        <option value="B_n" {% if blood.blood_group == 'B_n' %}selected{% endif %}>B-</option>
+        <option value="O_p" {% if blood.blood_group == 'O_p' %}selected{% endif %}>O+</option>
+        <option value="O_n" {% if blood.blood_group == 'O_n' %}selected{% endif %}>O-</option>
+      </select>
+    </div>
+    <div class="inputGroup">
+      <label for="address">Last date of donation:</label> ({{blood.last_donate}})
+      <input type="date" name="last_donate" value="{{ blood.last_donate|date:'Y-m-d' }}"/>
+    </div>
+
     
     <div class="text-center" style="width: 100%;;">
       <button class="btn bg-linear">Save</button>

@@ -20,27 +20,15 @@ CCN community
       </tr>
     </thead>
     <tbody>
+      {% for blood in bloods %}
       <tr>
-        <td>John</td>
-        <td>A-</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
+        <td> {{blood.user_details.fullName}} </td>
+        <td>{{blood.blood_group}}</td>
+        <td> {{blood.user_details.address}} </td>
+        <td>{{blood.last_donate}}</td>
+        <td>{{blood.phone}}</td>
       </tr>
-      <tr>
-        <td>Aohn</td>
-        <td>B+</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-      </tr>
-      <tr>
-        <td>bohn</td>
-        <td>A+</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>
