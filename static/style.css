@@ -10,3 +10,8 @@
     background-color: rgb(238, 218, 218);
     height: 1000px;  
 }
+
+.bg-linear {
+    color: white !important;
+    background: linear-gradient(156deg, rgba(171,6,147,1) 17%, rgba(161,15,101,1) 50%, rgba(162,25,25,1) 94%);
+}

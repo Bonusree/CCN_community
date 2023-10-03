@@ -4,7 +4,10 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import make_password  # Import this for securely hashing the password
 from django.contrib.auth import authenticate, login, logout
 
+from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.models import User
+from .models import User_Details, Blood
 
 # Create your views here.
 def home(request):
@@ -15,17 +18,17 @@ def Academic(request):
 def Routine(request):
     return render(request, 'routine.html')
 def blood_community(request):
-    return render(request, 'blood_community.html')
+    bloods = Blood.objects.all()
+    return render(request, 'blood_community.html',{'bloods':bloods})
 
 def show_alumni(request):
-    return render(request,'alumni.html')
+    all_alumni = User_Details.objects.filter(isAlumni=True)
+    return render(request,'alumni.html',{'all_alumni':all_alumni})
 
 def login_view(request):
     if request.method=='POST':
         username = request.POST['username']
         password = request.POST['password']
-        
-        print("----------------",username,password)
         
         user = authenticate(request, username=username, password=password)
         
@@ -65,11 +68,57 @@ def signup(request):
         new_user = User.objects.create_user(username=username, email=email, password=password)
         new_user.save()
         
+        user_details = User_Details.objects.create(user=User.objects.get(username=username))
+        
         context ={'type':'bg-success','message':'Successfully registered'}
         return render(request,'login.html',context=context)
         
     return render(request,'signup.html')
 
+@login_required
 def profile(request):
-    return render(request,'profile.html')
-    pass
+    if request.method=='POST':
+        fullname = request.POST['fullname']
+        dept = request.POST['dept']
+        session = request.POST['session']
+        profession = request.POST['profession']
+        profession = True if(profession=='1') else False
+        profession_details = request.POST['profession_details']
+        address = request.POST['address']
+        blood_group = request.POST['blood_group']
+        last_donate = request.POST['last_donate']
+        phone = request.POST['phone']
+        
+        user = User.objects.get(username=request.user.username)
+        if user:
+            # update user details 
+            _user, created = User_Details.objects.get_or_create(user=user)
+            _user.fullName=fullname
+            _user.department=dept
+            _user.session=session
+            if profession_details:
+                _user.profession=profession_details
+            _user.isAlumni=profession
+            _user.address=address
+            _user.save()
+            
+            # update blood information 
+            _blood , created= Blood.objects.get_or_create(user=user)
+            _blood.blood_group = blood_group
+            _blood.last_donate = last_donate
+            _blood.phone = phone
+            _blood.save()
+        
+    try:
+        user = User.objects.get(username=request.user.username)
+        details = User_Details.objects.get(user=user)
+        blood = Blood.objects.get(user=user)
+        context={'details':details,'blood':blood}
+    except User.DoesNotExist:
+        user_details = None
+        context={'type':'bg-info','message':'User not found'}
+    except User_Details.DoesNotExist:
+        context={'type':'bg-info','message':'User details not found'}
+        user_details = None
+    
+    return render(request,'profile.html',context=context)

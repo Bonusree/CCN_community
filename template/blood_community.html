@@ -1,14 +1,16 @@
 {% extends "master.html" %}
 
 {% block title %}
-  CCN community
+CCN community
 {% endblock %}
 
 {% block content %}
 <div class="m-3">
-  <input class="border-2 m-3" style="width: 30%;" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for blood group..">
-<table class="table table-success table-striped m-3" id="myTable" style="width: 98%;">
-  <thead>
+  <input class="border-2 m-3" style="width: 30%;" type="text" id="myInput"
+    onkeyup="myFunction()" placeholder="Search for blood group..">
+  <table class="table table-success table-striped m-3" id="myTable"
+    style="width: 98%;">
+    <thead>
       <tr>
         <th>Name</th>
         <th>Blood Group</th>
@@ -18,32 +20,20 @@
       </tr>
     </thead>
     <tbody>
+      {% for blood in bloods %}
       <tr>
-        <td>John</td>
-        <td>A-</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
+        <td> {{blood.user_details.fullName}} </td>
+        <td>{{blood.blood_group}}</td>
+        <td> {{blood.user_details.address}} </td>
+        <td>{{blood.last_donate}}</td>
+        <td>{{blood.phone}}</td>
       </tr>
-      <tr>
-        <td>Aohn</td>
-        <td>B+</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-      </tr>
-      <tr>
-        <td>bohn</td>
-        <td>A+</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-        <td>ranirbajar</td>
-      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
+</div>
 
-
-<script>
+  <script>
   function myFunction() {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue;
@@ -68,4 +58,4 @@
       }
     }
   </script>
-{% endblock %}
+  {% endblock %}

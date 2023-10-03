@@ -21,34 +21,30 @@ CCN community
                 <th>Name</th>
                 <th>Session</th>
                 <th>Department</th>
+                <th>Profession</th>
                 <th>Email</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>John</td>
-                <td>2017-2018</td>
-                <td>CSE</td>
-                <td>example@example.com</td>
-            </tr>
-            <tr>
-                <td>John</td>
-                <td>2018-2019</td>
-                <td>CSE</td>
-                <td>example@example.com</td>
-            </tr>
-            <tr>
-                <td>John</td>
-                <td>2015-2016</td>
-                <td>CSE</td>
-                <td>example@example.com</td>
-            </tr>
+            {% for alumni in all_alumni %}
+                <tr>
+                    <td>{{alumni.fullName}} </td>
+                    <td>{{alumni.session}}</td>
+                    <td>{{alumni.department}}</td>
+                    <td>{{alumni.profession}}</td>
+                    <td>{{alumni.user.email}}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-
+</div>
     <script>
   function myFunction() {
     
     }
   </script>
+{% endblock %}
+
+{% block footer %}
+{{block.super}}
 {% endblock %}

@@ -34,65 +34,73 @@
 
     <nav class="navbar navbar-expand" style="background:linear-gradient(156deg, rgba(171,6,147,1) 17%, rgba(161,15,101,1) 50%, rgba(162,25,25,1) 94%); color:rgb(245, 237, 228)" >
         <div class="container-fluid">
-          <!-- <a class="navbar-brand link-light" href="javascript:void(0)">Logo</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-            <span class="navbar-toggler-icon"></span>
-          </button> -->
-          <div class="collapse navbar-collapse" id="mynavbar">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item ms-5" style="font-family: Audiowide, sans-serif;">
-                <h1>Help</h1>
-              </li>
-              <li class="nav-item-default me-5" style="font-family: Audiowide, sans-serif;">
-                <h1 style="color:red">!</h1>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link h4 link-light " href="/">Home</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link h4 link-light " href="/academic/">Academic</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link h4 link-light " href="/blood_community/">Blood community</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link h4 link-light " href="/alumni/">Alumni</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link h4 link-light " href="/">Achievement</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link h4 link-light " href="/books/">Notice</a>
-              </li>
-              
-            </ul>
-            <ul class="navbar-nav d-flex" >
-             {% if user.is_authenticated %}
-           
-            <li class="nav-item">
-              <a class="nav-link text-warning {% if request.path == '/profile/' %}active{% endif %}" href="/profile/">{{user.username}}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-warning" href="/logout/">Logout</a>
-            </li>
-            {% else %} 
-            
-                <li class="nav-item">
-                    <a class="nav-link h4 link-light" href="/login">Login </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link h4 link-light" href="/signup">Signup </a>
-                  </li>
-              {%endif%}
+            <!-- <a class="navbar-brand link-light" href="javascript:void(0)">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item ms-5" style="font-family: Audiowide, sans-serif;">
+                    <h1>Help</h1>
+                    </li>
+                    <li class="nav-item-default me-5" style="font-family: Audiowide, sans-serif;">
+                    <h1 style="color:red">!</h1>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/">Home</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/academic/">Academic</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/blood_community/">Blood community</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/alumni/">Alumni</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/">Achievement</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/books/">Notice</a>
+                    </li>
                 </ul>
-          </div>
+                <ul class="navbar-nav d-flex" >
+                    {% if user.is_authenticated %}
+                
+                    <li class="nav-item">
+                        <a class="nav-link text-warning {% if request.path == '/profile/' %}active{% endif %}" href="/profile/">{{user.username}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="/logout/">Logout</a>
+                    </li>
+                    {% else %} 
+                    
+                    <li class="nav-item">
+                        <a class="nav-link h4 link-light" href="/login">Login </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link h4 link-light" href="/signup">Signup </a>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
         </div>
-      </nav>
+    </nav>
     <div class="text-center  text-white mt-2 {{type}} m-auto rounded-3 py-1" style="width: 90%;">
       {{message}}
     </div>
-  {% block content %}
-  {% endblock %}
+    
+    <div style="min-height: 100vh;">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    <div>
+        {% block footer %}
+            <div class="bg-linear mt-5" style="text-align: center;">It is footer</div>
+        {% endblock %}
+    </div>
 
 </body>
 
