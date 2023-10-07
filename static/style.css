@@ -15,3 +15,16 @@
     color: white !important;
     background: linear-gradient(156deg, rgba(171,6,147,1) 17%, rgba(161,15,101,1) 50%, rgba(162,25,25,1) 94%);
 }
+@keyframes slideInLeft {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  /* Apply the animation to the card element */
+  .card.slide-in {
+    animation: slideInLeft 0.5s forwards;
+  }

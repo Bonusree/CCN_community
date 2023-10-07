@@ -17,6 +17,12 @@ def Academic(request):
     return render(request,'academic.html')
 def Routine(request):
     return render(request, 'routine.html')
+def Question_bank(request):
+    return render(request, 'question_bank.html')
+def tutorial(request):
+    return render(request, 'tutorial.html')
+def academic_notice(request):
+    return render(request, 'academic_notice.html')
 def blood_community(request):
     bloods = Blood.objects.all()
     return render(request, 'blood_community.html',{'bloods':bloods})
