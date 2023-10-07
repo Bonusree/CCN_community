@@ -17,6 +17,12 @@ def Academic(request):
     return render(request,'academic.html')
 def Routine(request):
     return render(request, 'routine.html')
+def Question_bank(request):
+    return render(request, 'question_bank.html')
+def tutorial(request):
+    return render(request, 'tutorial.html')
+def academic_notice(request):
+    return render(request, 'academic_notice.html')
 def blood_community(request):
     bloods = Blood.objects.all()
     return render(request, 'blood_community.html',{'bloods':bloods})
@@ -24,6 +30,13 @@ def blood_community(request):
 def show_alumni(request):
     all_alumni = User_Details.objects.filter(isAlumni=True)
     return render(request,'alumni.html',{'all_alumni':all_alumni})
+
+def achievement(request):
+    return render(request,'achievement.html')
+
+def notice(request):
+    return render(request,'notice.html')
+
 
 def login_view(request):
     if request.method=='POST':
