@@ -30,28 +30,13 @@
     <script src="{% static 'js/js.js' %}"></script>
     <style>
     .cursor-border {
-        border-bottom: 3px solid rgb(76, 0, 255);
+        border-bottom: 3px solid rgb(227, 224, 234);
     }
     * {
       box-sizing: border-box;
     }
     
-    .bg-image {
-      /* The image used */
-      background-image: url("photographer.jpg");
-      
-      /* Add the blur effect */
-      filter: blur(8px);
-      -webkit-filter: blur(8px);
-      
-      /* Full height */
-      height: 100%; 
-      
-      /* Center and scale the image nicely */
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+    
     .bg-text {
       background-color: rgb(0,0,0); /* Fallback color */
       background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
@@ -73,7 +58,7 @@
 </head>
 <body style="background-image: url(static/img/uni.jpg); 
 background-repeat: no-repeat;
-
+background-color: rgba(0, 0, 155, 0.4);
 background-position: center; text-align:center; color:aliceblue ">
   
   
@@ -117,21 +102,26 @@ background-position: center; text-align:center; color:aliceblue ">
                     <li class="nav-item">
                         <a class="nav-link text-warning" href="/logout/">Logout</a>
                     </li>
-                    {% else %} 
                     
-                    <li class="nav-item">
-                        <a class="nav-link h4 link-light" href="/login">Login </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link h4 link-light" href="/signup">Signup </a>
-                    </li>
                     {%endif%}
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="bg-text "  >
+    <div class="bg-text m-3"  >
     <h1 >welcome to ccn community</h1>
+    {%if user.is_authenticated%}
+    {%else%}
+    <div class="m-5">
+      <ul>
+        <li>
+          <a  class="m-3 p-3 text-white" href="/login/"style="border: 2px solid white; text-decoration:none;">Admin</a>
+          <a class="m-3 p-3 text-white"href="/login/" style="border: 2px solid white; text-decoration:none;">Student</a>
+        </li>
+      </ul>
+      
+    </div>
+    {%endif%}
     </div>
     
     
