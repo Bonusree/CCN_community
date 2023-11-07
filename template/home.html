@@ -1,16 +1,129 @@
-{% extends "master.html" %}
 
-{% block title %}
-  CCN community
-{% endblock %}
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  
+  {% load bootstrap5 %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  
 
-{% block content %}
+    <!-- bootstrap  -->
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous">
 
-<div class="text-white m-0 p-0 text-center" style="background-color:rgb(162, 87, 232);min-width:100%;height: 90vh;font-family: 'Brush Script MT', cursive"> <h1>welcome to ccn community</h1>
-   <div class="card opacity-50 position-absolute top-50 start-50 translate-middle  p-3 mx-auto " style="background-image: url(static/img/logo.jpeg); width:200px; height: 200px;
-   background-repeat: no-repeat;
-   background-attachment: fixed;
-   background-position: center; "></div>
-   </div> 
+    <!-- font-awesome libray -->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    
+    <!-- ajax libray -->
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="{% static 'js/js.js' %}"></script>
+    <style>
+    .cursor-border {
+        border-bottom: 3px solid rgb(76, 0, 255);
+    }
+</style>
+    </head>
+</head>
+<body class="text-center"style="background-image: url(static/img/uni.jpg); width:200px; height: 200px;
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-position: center; color:aliceblue ">
+  
+  
+    <nav class="navbar navbar-expand navbar-transparent " style="width: 100%; color:aliceblue;" >
+        <div class="container-fluid">
+            <!-- <a class="navbar-brand link-light" href="javascript:void(0)">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav me-auto">
+                    
+                    <li class="nav-item-default me-5" style="font-family: Audiowide, sans-serif;">
+                        <img src="{%static 'img/logo.jpeg' %}" alt="Bootstrap" width="60" height="60">
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/">Home</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/academic/">Academic</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/blood_community/">Blood community</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/alumni/">Alumni</a>
+                    </li>
+                    <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/achievement">Achievement</a>
+                    </li>
+                    <!-- <li class="nav-item ">
+                    <a class="nav-link h4 link-light " href="/notice/">Notice</a>
+                    </li> -->
+                </ul>
+                <ul class="navbar-nav ml-5" >
+                    {% if user.is_authenticated %}
+                
+                    <li class="nav-item">
+                        <a class="nav-link text-warning {% if request.path == '/profile/' %}active{% endif %}" href="/profile/">{{user.username}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="/logout/">Logout</a>
+                    </li>
+                    {% else %} 
+                    
+                    <li class="nav-item">
+                        <a class="nav-link h4 link-light" href="/login">Login </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link h4 link-light" href="/signup">Signup </a>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div><h1 style="margin:300px;">welcome man</h1></div>
+    
+    
+    
+    
+  
+  
+</body>
+<div>
+  {% block footer %}
+      <div class="bg-linear mt-5" style="text-align: center;">It is footer</div>
+  {% endblock %}
+</div>
+<script>
+  // Get all the navbar links
+  var navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
-{% endblock %}
+  // Add a mouseover event to each link
+  navbarLinks.forEach(function(link) {
+      link.addEventListener('mouseover', function(event) {
+          // Add the 'cursor-border' class to the link when the cursor is over it
+          event.target.classList.add('cursor-border');
+      });
+
+      // Add a mouseout event to each link
+      link.addEventListener('mouseout', function(event) {
+          // Remove the 'cursor-border' class from the link when the cursor leaves it
+          event.target.classList.remove('cursor-border');
+      });
+  });
+</script>
+
+</html>
