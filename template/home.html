@@ -32,16 +32,52 @@
     .cursor-border {
         border-bottom: 3px solid rgb(76, 0, 255);
     }
+    * {
+      box-sizing: border-box;
+    }
+    
+    .bg-image {
+      /* The image used */
+      background-image: url("photographer.jpg");
+      
+      /* Add the blur effect */
+      filter: blur(8px);
+      -webkit-filter: blur(8px);
+      
+      /* Full height */
+      height: 100%; 
+      
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .bg-text {
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+      color: white;
+      font-weight: bold;
+      border: 3px solid #f1f1f1;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      width: 80%;
+      margin-bottom: 200px;
+      padding: 20px;
+      text-align: center;
+    }
 </style>
     </head>
 </head>
-<body class="text-center"style="background-image: url(static/img/uni.jpg); width:200px; height: 200px;
+<body style="background-image: url(static/img/uni.jpg); 
 background-repeat: no-repeat;
-background-attachment: fixed;
-background-position: center; color:aliceblue ">
+
+background-position: center; text-align:center; color:aliceblue ">
   
   
-    <nav class="navbar navbar-expand navbar-transparent " style="width: 100%; color:aliceblue;" >
+    <nav class="navbar  navbar-expand navbar-transparent " style="width: 100%; color:aliceblue; background-color: rgba(0,0,0, 0.4);" >
         <div class="container-fluid">
             <!-- <a class="navbar-brand link-light" href="javascript:void(0)">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
@@ -72,7 +108,7 @@ background-position: center; color:aliceblue ">
                     <a class="nav-link h4 link-light " href="/notice/">Notice</a>
                     </li> -->
                 </ul>
-                <ul class="navbar-nav ml-5" >
+                <ul class="navbar-nav ml-5 text-black-50" >
                     {% if user.is_authenticated %}
                 
                     <li class="nav-item">
@@ -94,19 +130,20 @@ background-position: center; color:aliceblue ">
             </div>
         </div>
     </nav>
-    <div><h1 style="margin:300px;">welcome man</h1></div>
+    <div class="bg-text "  >
+    <h1 >welcome to ccn community</h1>
+    </div>
     
     
     
     
+      
+          <div class="bg-linear " style="text-align: center;margin-top: 600px;">It is footer</div>
+      
   
   
 </body>
-<div>
-  {% block footer %}
-      <div class="bg-linear mt-5" style="text-align: center;">It is footer</div>
-  {% endblock %}
-</div>
+
 <script>
   // Get all the navbar links
   var navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
