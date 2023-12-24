@@ -21,7 +21,7 @@ def academic(request):
         # Check if the session exists for the department
         session, created = Session.objects.get_or_create(department=department, session_name=session)
 
-        # Create a new SyllabusFile instance
+        Syllabus.objects.filter(syllabus=session).delete()
         syllabus_file = Syllabus(syllabus=session, pdf_file=pdf_file)
         syllabus_file.save()
     try:
@@ -34,30 +34,47 @@ def academic(request):
     except Exception as e:
         return HttpResponse(e)
     
+from django.shortcuts import render, HttpResponse
+from .models import Department, Session, Routine
+
+from django.shortcuts import render, HttpResponse
+from .models import Department, Session, Routine
+
 def routine(request):
-    if request.method == 'POST':
-        department = request.POST['dept_name']
-        session=request.POST['session']
-        pdf_file = request.FILES['pdfFile']
-        
-        # Check if the department exists
-        department, created = Department.objects.get_or_create(department=department)
-
-        # Check if the session exists for the department
-        session, created = Session.objects.get_or_create(department=department, session_name=session)
-
-        
-        routine_file = Routine(routine=session, pdf_file=pdf_file)
-        routine_file.save()
     try:
-        routine_list=Routine.objects.all()
-        department_list=Department.objects.all()
-        for d in department_list:
-            print(d.department)
-        context={'Routine_list': Routine_list, 'department_list':department_list}
-        return render(request,'routine.html', context)
+        if request.method == 'POST':
+            department_name = request.POST['dept_name']
+            session_name = request.POST['session']
+            pdf_file = request.FILES['pdfFile']
+            
+            # Check if the department exists
+            department, created = Department.objects.get_or_create(department=department_name)
+
+            # Check if the session exists for the department
+            session, created = Session.objects.get_or_create(department=department, session_name=session_name)
+            print(session)
+            # Delete existing Routine data with the same department and session
+            try:
+                Routine.objects.filter(routine=session).delete()
+            except Exception as e:
+                print("here delete")
+                return HttpResponse(e)
+            # Create new Routine entry
+            try:
+                routine_file = Routine.objects.create(routine=session, pdf_file=pdf_file)
+            except Exception as e:
+                print("here")
+                return HttpResponse(e)
+        # Fetch the routine list and department list
+        routine_list = Routine.objects.all()
+        department_list = Department.objects.all()
+
+        context = {'routine_list': routine_list, 'department_list': department_list}
+        return render(request, 'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
+
+
 def question_bank(request):
     if request.method == 'POST':
         department = request.POST['dept_name']
