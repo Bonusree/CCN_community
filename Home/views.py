@@ -13,12 +13,7 @@ from .models import User_Details, Blood
 def home(request):
     return render(request,'home.html')
 
-def Academic(request):
-    return render(request,'academic.html')
-def Routine(request):
-    return render(request, 'routine.html')
-def Question_bank(request):
-    return render(request, 'question_bank.html')
+
 def tutorial(request):
     return render(request, 'tutorial.html')
 def academic_notice(request):
