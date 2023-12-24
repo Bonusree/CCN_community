@@ -1,5 +1,5 @@
 <h1>Project Title: CCN community </h1>
-It's a django based project
+It's a django based project<br>
 ** Superuser: **
 admin
 pass:123
