@@ -1,6 +1,6 @@
 <h1>Project Title: CCN community </h1>
 It's a django based project<br>
-**Superuser:**<br>
+<b>Superuser:</b><br>
 admin
 pass:123<br>
 * remove DB:
