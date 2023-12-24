@@ -54,7 +54,7 @@ def routine(request):
         department_list=Department.objects.all()
         for d in department_list:
             print(d.department)
-        context={'Routine_list': Routine_list, 'department_list':department_list}
+        context={'Routine_list': routine_list, 'department_list':department_list}
         return render(request,'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
