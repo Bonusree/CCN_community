@@ -1,156 +1,46 @@
+{% extends "master.html" %}
 
-<!DOCTYPE html>
-{% load static %}
-<html>
-<head>
-  
-  {% load bootstrap5 %}
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
-  <link rel="stylesheet" href="{% static 'style.css' %}" />
-  
+{% block title %}
+  CCN community
+{% endblock %}
 
-    <!-- bootstrap  -->
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous">
-
-    <!-- font-awesome libray -->
-    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-    
-    <!-- ajax libray -->
-    <script
-      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="{% static 'js/js.js' %}"></script>
-    <style>
-    .cursor-border {
-        border-bottom: 3px solid rgb(227, 224, 234);
-    }
-    * {
-      box-sizing: border-box;
-    }
-    
-    
-    .bg-text {
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
-      color: white;
-      font-weight: bold;
-      border: 3px solid #f1f1f1;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      width: 80%;
-      margin-bottom: 200px;
-      padding: 20px;
-      text-align: center;
-    }
-</style>
-    </head>
-</head>
-<body style="background-image: url(static/img/uni.jpg); 
-background-repeat: no-repeat;
-background-color: rgba(0, 0, 155, 0.4);
-background-position: center; text-align:center; color:aliceblue ">
-  
-  
-    <nav class="navbar  navbar-expand navbar-transparent " style="width: 100%; color:aliceblue; background-color: rgba(0,0,0, 0.4);" >
-        <div class="container-fluid">
-            <!-- <a class="navbar-brand link-light" href="javascript:void(0)">Logo</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button> -->
-            <div class="collapse navbar-collapse" id="mynavbar">
-                <ul class="navbar-nav me-auto">
-                    
-                    <li class="nav-item-default me-5" style="font-family: Audiowide, sans-serif;">
-                        <img src="{%static 'img/logo.jpeg' %}" alt="Bootstrap" width="60" height="60">
-                    </li>
-                    <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/">Home</a>
-                    </li>
-                    <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/academic/">Academic</a>
-                    </li>
-                    <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/blood_community/">Blood community</a>
-                    </li>
-                    <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/alumni/">Alumni</a>
-                    </li>
-                    <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/achievement">Achievement</a>
-                    </li>
-                    <!-- <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/notice/">Notice</a>
-                    </li> -->
-                </ul>
-                <ul class="navbar-nav ml-5 text-black-50" >
-                    {% if user.is_authenticated %}
-                
-                    <li class="nav-item">
-                        <a class="nav-link text-warning {% if request.path == '/profile/' %}active{% endif %}" href="/profile/">{{user.username}}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-warning" href="/logout/">Logout</a>
-                    </li>
-                    
-                    {%endif%}
-                </ul>
-            </div>
+{% block content %}
+<!-- <div class="container-fluid text-center" style="margin: -16px 0px; height: 100vh;">
+    <div class="bg-danger mx-auto" style="border: 1px solid rgb(34, 19, 19);
+     font-family: cursive, 'Brush Script MT'; width: 800px; background-image: 
+     url(static/img/uni.jpg); background-repeat: no-repeat; background-position: 
+     center; filter: blur(5px);">
+        <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+            <h1>Help and connect with everybody by exchanging yours need</h1>
+            <p>Seniors can upload their questions and books</p>
+            <p>Juniors take help from your junior by fulfilling your seeks</p>
         </div>
-    </nav>
-    <div class="bg-text m-3"  >
-    <h1 >welcome to ccn community</h1>
-    {%if user.is_authenticated%}
-    {%else%}
-    <div class="m-5">
-      <ul>
-        <li>
-          <a  class="m-3 p-3 text-white" href="/login/"style="border: 2px solid white; text-decoration:none;">Admin</a>
-          <a class="m-3 p-3 text-white"href="/login/" style="border: 2px solid white; text-decoration:none;">Student</a>
-        </li>
-      </ul>
-      
     </div>
-    {%endif%}
+</div> -->
+<style>
+    img {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: -1;
+}
+</style>
+<div class="container-fluid text-center" style="height: fit-content;">
+    <img src="static/img/uni.jpg" style="filter: blur(5px); height: fit-content; width: 100%;">
+    <div class="mx-auto " style="background-color: #b7b7b77d; border: 1px solid rgb(164, 163, 163);
+    font-family: Helvetica, Arial; width: 800px;">
+        <h1 class="fw-bold my-5">Welcome to CCN Community</h1>
+        <h3 class="my-3">Help and connect with everybody by exchanging yours need</h3>
+        <span class="my-4">Seniors can upload their questions and books</span> <br>
+        <span class="my-4">Juniors take help from your junior by fulfil your seeks</span>
+        <div class="m-5">
+            <ul>
+              <li>
+                <a  class="m-3 p-3 text-white" href="/login/"style="border: 2px solid white; text-decoration:none;">Admin</a>
+                <a class="m-3 p-3 text-white"href="/login/" style="border: 2px solid white; text-decoration:none;">Student</a>
+              </li>
+            </ul>
+        </div>
     </div>
-    
-    
-    
-    
-      
-          <div class="bg-linear " style="text-align: center;margin-top: 600px;">It is footer</div>
-      
-  
-  
-</body>
-
-<script>
-  // Get all the navbar links
-  var navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
-
-  // Add a mouseover event to each link
-  navbarLinks.forEach(function(link) {
-      link.addEventListener('mouseover', function(event) {
-          // Add the 'cursor-border' class to the link when the cursor is over it
-          event.target.classList.add('cursor-border');
-      });
-
-      // Add a mouseout event to each link
-      link.addEventListener('mouseout', function(event) {
-          // Remove the 'cursor-border' class from the link when the cursor leaves it
-          event.target.classList.remove('cursor-border');
-      });
-  });
-</script>
-
-</html>
+</div>
+{% endblock %}

@@ -81,7 +81,8 @@ def signup(request):
         new_user = User.objects.create_user(username=username, email=email, password=password)
         new_user.save()
         
-        user_details = User_Details.objects.create(user=User.objects.get(username=username))
+        User_Details.objects.create(user=User.objects.get(username=username))
+        Blood.objects.create(user=User.objects.get(username=username))
         
         context ={'type':'bg-success','message':'Successfully registered'}
         return render(request,'login.html',context=context)
@@ -118,7 +119,8 @@ def profile(request):
             # update blood information 
             _blood , created= Blood.objects.get_or_create(user=user)
             _blood.blood_group = blood_group
-            _blood.last_donate = last_donate
+            if last_donate:
+                _blood.last_donate = last_donate
             _blood.phone = phone
             _blood.save()
         
