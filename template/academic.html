@@ -28,47 +28,51 @@ Academic
 </nav>
 
 <div class="row">
+  
   <div class="col-3 col_color p-3 text-center" style="height: auto;">
     <input class="border-0 m-2 rounded-3" style="width: 100%;" type="text"
       id="myInput"
       onkeyup="myFunction()" placeholder="Search for Department..">
     <ul class="list-unstyled text-start" id="sortable-list">
-      <li> <a class="nav-link" href="#Computer Science ">Computer Science</a></li>
-      <li><a class="nav-link" href="#Law ">law</a></li>
-      <li><a class="nav-link" href="#Pharmacy ">Pharmacy</a></li>
+      {% for department_list in department_list %}
+      <li><a class="nav-link" href="#{{ department_list.department }} ">{{ department_list.department }}</a></li>
+      {% endfor %}
+      
     </ul>
   </div>
+  
   <div class="col-9  p-3 text-center">
+      {% if request.user.is_superuser %}
+    <div>
 
-    <div id="Computer Science" class="card text-dark bg-light m-4"
-      style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Computer Science</div>
-        {% if request.user.is_superuser %}
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_syllabus">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
+      <button type="button"
+        class="btn btn-sm border btn-default fw-bold mx-3"
+        style="color:blue;" data-bs-toggle="modal"
+        data-bs-target="#add_syllabus">Add Syllabus</button>
+      
+    </div>
+    {%endif%}
+    {% for department_list in department_list %}
+      <div id="{{ department_list.department }}" class="card text-dark bg-light m-4"
+        style="max-width:100%; ">
+        <div class="card-header d-inline-flex ">
+          <div class="flex-fill">{{ department_list.department }}</div>
 
         </div>
-        {%endif%}
-      </div>
 
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
+        <div class="card m-4 p-3">
+          
+          <ul id="sortable-list2">
+          {%for syllabus_list in syllabus_list%}
+          {% if department_list.department == syllabus_list.syllabus.department.department %}
+            <li><a href="{{ syllabus_list.pdf_file.url }}" target="_blank">{{ syllabus_list.syllabus.session_name }}</a></li>
+          {%endif%}
+          {%endfor%}
+          </ul>
+          
+        </div>
       </div>
-    </div>
-
+    {% endfor %}
   </div>
 </div>
 
@@ -78,15 +82,18 @@ Academic
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addLabel">Add the book's name what you
-          have</h5>
+        <h5 class="modal-title" id="addLabel">Add the Syllabus with session</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
-        <form action method="POST" enctype="multipart/form-data">
+        <form action="{% url 'academic' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
+          <label for ='dept'>Department Name:</label>
+          <input type="text" name="dept_name"><br><br>
+          <label for="session">Session:</label>
+          <input type="text" name="session"><br><br>
           <label for="pdfFile">Choose a PDF file:</label>
           <input type="file" class="form-control-file" id="pdfFile"
             name="pdfFile">
