@@ -15,22 +15,6 @@ from CCN_community.decorators import superuser
 # update or delete korar somoy kaje lagbe 
 
 def academic(request):
-    # ei method theke shudhu syllabus retrieve koris
-    # niche ekta method dichi sekhane syllabus add koris
-    if request.method == 'POST':
-        department = request.POST['dept_name']
-        session=request.POST['session']
-        pdf_file = request.FILES['pdfFile']
-        
-        # Check if the department exists
-        department, created = Department.objects.get_or_create(department=department)
-
-        # Check if the session exists for the department
-        session, created = Session.objects.get_or_create(department=department, session_name=session)
-
-        Syllabus.objects.filter(syllabus=session).delete()
-        syllabus_file = Syllabus(syllabus=session, pdf_file=pdf_file)
-        syllabus_file.save()
     try:
         syllabus_list=Syllabus.objects.all().order_by('syllabus')
         department_list=Department.objects.all().order_by('department')
@@ -45,19 +29,42 @@ def academic(request):
 
 @superuser
 def add_syllabus(request):
-    # ekhane syllabus add koris 
-    pass 
-
-# ei rokom sob gular jonno alada add method rakhis 
-# jegular sathe superuser decoration thakbe
-
-# je method data ber korbi segula normal but jegula add/delete korbi segula
-# shudhu superuser 
-
-def routine(request):
     try:
         if request.method == 'POST':
-            department_name = request.POST['dept_name']
+            department_name = request.POST['department_name']
+            session=request.POST['session']
+            pdf_file = request.FILES['pdfFile']
+            
+            # Check if the department exists
+            department, created = Department.objects.get_or_create(department=department_name)
+
+            # Check if the session exists for the department
+            session, created = Session.objects.get_or_create(department=department, session_name=session)
+
+            Syllabus.objects.filter(syllabus=session).delete()
+            syllabus_file = Syllabus(syllabus=session, pdf_file=pdf_file)
+            syllabus_file.save()
+            syllabus_list=Syllabus.objects.all().order_by('syllabus')
+            department_list=Department.objects.all().order_by('department')
+            for d in department_list:
+                print(d.department)
+       
+            context={'syllabus_list': syllabus_list, 'department_list':department_list}
+            return render(request,'academic.html', context)
+    except Exception as e:
+            syllabus_list=Syllabus.objects.all().order_by('syllabus')
+            department_list=Department.objects.all().order_by('department')
+            for d in department_list:
+                print(d.department)
+       
+            context={'syllabus_list': syllabus_list, 'department_list':department_list,'error_message': str(e)}
+            return render(request,'academic.html', context)
+       
+@superuser
+def add_routine(request):
+    try:
+        if request.method == 'POST':
+            department_name = request.POST['department_name']
             session_name = request.POST['session']
             pdf_file = request.FILES['pdfFile']
             
@@ -79,6 +86,23 @@ def routine(request):
             except Exception as e:
                 print("here")
                 return HttpResponse(e)
+            try:
+                # Fetch the routine list and department list
+                routine_list = Routine.objects.all().order_by('routine')
+                department_list = Department.objects.all().order_by('department')
+
+                context = {'routine_list': routine_list, 'department_list': department_list}
+                return render(request, 'routine.html', context)
+            except Exception as e:
+                return HttpResponse(e)
+    except Exception as e:
+        routine_list = Routine.objects.all().order_by('routine')
+        department_list = Department.objects.all().order_by('department')
+
+        context = {'routine_list': routine_list, 'department_list': department_list,'error_message': str(e)}
+        return render(request, 'routine.html', context)
+def routine(request):
+    try:
         # Fetch the routine list and department list
         routine_list = Routine.objects.all().order_by('routine')
         department_list = Department.objects.all().order_by('department')
@@ -89,6 +113,20 @@ def routine(request):
         return HttpResponse(e)
 
 def question_bank(request):
+    try:
+        # Fetch the routine list and department list
+        question_list = Question_bank.objects.all().order_by('course_name')
+        department_list = Department.objects.all().order_by('department')
+        course_names = [question.course_name for question in question_list]
+        for course_name in course_names:
+            print(course_name)
+       # print(question_list.course_name)
+        context = {'question_list': question_list,'course_name':course_name, 'department_list': department_list}
+        return render(request, 'question_bank.html', context)
+    except Exception as e:
+        return HttpResponse(e)
+
+def add_question(request):
     try:
         if request.method == 'POST':
             department_name = request.POST['department_name']
@@ -114,6 +152,21 @@ def question_bank(request):
             except Exception as e:
                 print("here")
                 return HttpResponse(e)
+            try:
+                # Fetch the routine list and department list
+                question_list = Question_bank.objects.all().order_by('course_name')
+                department_list = Department.objects.all().order_by('department')
+                course_names = [question.course_name for question in question_list]
+                for course_name in course_names:
+                    print(course_name)
+            # print(question_list.course_name)
+                context = {'question_list': question_list,'course_name':course_name, 'department_list': department_list}
+                return render(request, 'question_bank.html', context)
+            except Exception as e:
+                print("here")
+                return HttpResponse(e)
+    except Exception as e:
+       
         # Fetch the routine list and department list
         question_list = Question_bank.objects.all().order_by('course_name')
         department_list = Department.objects.all().order_by('department')
@@ -121,11 +174,9 @@ def question_bank(request):
         for course_name in course_names:
             print(course_name)
        # print(question_list.course_name)
-        context = {'question_list': question_list,'course_name':course_name, 'department_list': department_list}
+        context = {'question_list': question_list,'course_name':course_name, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'question_bank.html', context)
-    except Exception as e:
-        return HttpResponse(e)
-
+    
 def tutorial(request):
     return render(request, 'tutorial.html')
 def academic_notice(request):
