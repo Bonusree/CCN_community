@@ -5,9 +5,58 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container text-center p-3" style="border: 1px solid rgb(164, 163, 163); font-family: cursive,'Brush Script MT'; width: 800px;">
-    <h1>Help and connect with everybody by exchanging yours need</h1>
-    <p>Seniors can upload their questions and books</p>
-    <p>Juniors take help from your junior by fulfil your seeks</p>
+<div class="container">
+  <div class="text-end m-4">
+    {% if user.is_superuser %} 
+      <A class="btn btn-info" href="{% url 'add_achievement' %}">Add Acchievement</A>
+    {% endif %}
   </div>
+  <div class="row">
+    {% for achievement in achievements %}
+      <div class="col-md-4 mb-4">
+        <div class="card" onclick="showDescription('{{ achievement.description }}','{{achievement.title}}','{{ achievement.image.url }}')">
+          <img height="400px" src="{{ achievement.image.url }}" class="card-img-top" alt="{{ achievement.title }}">
+          <div class="card-body" style="background-color: #c1faf8;">
+            <h5 class="card-title">{{ achievement.title }}</h5>
+          </div>
+          <div class="card-footer text-muted d-flex justify-content-between">
+            <span>
+              {{ achievement.date_achieved }}
+            </span>
+            {% if user.is_superuser %}
+              <a  href="{% url 'delete_achievement' ach_id=achievement.id %}">Delete</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Modal for Achievement Description -->
+<div class="modal" tabindex="-1" role="dialog" id="achievementModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="modalTitle" class="modal-title"></h5>
+      </div>
+      <div class="modal-body" >
+        <div id="achievementDescription" ></div>
+        <div class="text-center mt-3">
+          <img style="max-width: 500px;" id="imgUrl" src="" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showDescription(description,title,imgUrl) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('achievementDescription').innerText = description;
+    var img = document.getElementById('imgUrl');
+    img.src = imgUrl;
+    $('#achievementModal').modal('show');
+  }
+</script>
 {% endblock %}
