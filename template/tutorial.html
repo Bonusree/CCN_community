@@ -7,231 +7,76 @@ Academic
 {% include 'academic_header' %}
 
 <div class="row">
+  
   <div class="col-3 col_color p-3 text-center" style="height: auto;">
     <input class="border-0 m-2 rounded-3" style="width: 100%;" type="text"
       id="myInput"
       onkeyup="myFunction()" placeholder="Search for Department..">
-      <ul class="list-unstyled text-start" id="sortable-list">
-        <li> <a class="nav-link" href="#Computer Science ">Computer Science</a></li>
-        <li><a class="nav-link" href="#Law ">law</a></li>
-        <li><a class="nav-link" href="#Pharmacy ">Pharmacy</a></li>
-      </ul>
+    <ul class="list-unstyled text-start" id="sortable-list">
+      {% for department_list in department_list %}
+      <li><a class="nav-link" href="#{{ department_list.department }} ">{{ department_list.department }}</a></li>
+      {% endfor %}
+    </ul>
   </div>
+  
   <div class="col-9  p-3 text-center">
-    {% if request.user.is_superuser %}
+    
     <div class="text-end">
       <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal"
-      data-bs-target="#add_syllabus">Add Tutorial</button>
-    </div>
-    {%endif%}
-    <div id="Computer Science" class="card text-dark bg-light m-4"
+      data-bs-target="#add_syllabus">Add tutorials</button>
+  </div>
+
+  {% if error_message %}
+        <p style="color: red;">Error: {{ error_message|upper }}</p>
+  {% endif %}
+  {% for department_list in department_list %}
+  <div id="{{ department_list.department }}" class="card text-dark bg-light m-4"
     style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Computer Science</div>
+    <div class="card-header d-inline-flex ">
+      <div class="flex-fill">{{ department_list.department }}</div>
 
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_available_books">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
-
-        </div>
-      </div>
-      
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
     </div>
-    <div id="Law" class="card text-dark bg-light m-4"
-      style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Law</div>
 
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_available_books">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
-
-        </div>
-      </div>
+    <div class="card m-4 p-3">
+      <ul  id="sortable-list2">
       
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
-    </div>
-    <div id="" class="card text-dark bg-light m-4"
-    style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Available</div>
-
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_available_books">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
-
-        </div>
-      </div>
+      {%for tutorial_list in tutorial_list%}
+      {% if department_list.department == tutorial_list.tutorial.department.department %}
+        {% if tutorial_list.pdf_file.url %}
+          <li><a href="{{ tutorial_list.pdf_file.url }}" target="_blank"> {{ tutorial_list.course_name }} {{ tutorial_list.tutorial.faculty }}</a></li>
+        {%endif%}
+      {%endif%}
+     
+      {%endfor%}
+      </ul>
+      </ul>
       
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
-    </div>
-    <div id="" class="card text-dark bg-light m-4"
-    style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Available</div>
-
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_available_books">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
-
-        </div>
-      </div>
-      
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
-    </div>
-    <div id="" class="card text-dark bg-light m-4"
-    style="max-width:100%;">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Available</div>
-
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_available_books">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
-
-        </div>
-      </div>
-      
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
-    </div>
-    <div id="" class="card text-dark bg-light m-4"
-    style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Available</div>
-
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_available_books">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
-
-        </div>
-      </div>
-      
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
-    </div>
-    <div id="Pharmacy" class="card text-dark bg-light m-4"
-    style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Pharmacy</div>
-
-        <div>
-
-          <button type="button"
-            class="btn btn-sm border btn-default fw-bold mx-3"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#add_available_books">Add </button>
-          <button type="button" class="btn btn-default btn-sm border fw-bold"
-            style="color:blue;" data-bs-toggle="modal"
-            data-bs-target="#edit_available_books">edit</button>
-
-        </div>
-      </div>
-      
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
     </div>
   </div>
+{% endfor %}
+
+
+  </div>
 </div>
+
 <!-- modal -->
 <div class="modal fade" id="add_syllabus" tabindex="-1"
   aria-labelledby="addLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addLabel">Add the Syllabus with session</h5>
+        <h5 class="modal-title" id="addLabel">Add the tutorial</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
-        <form action="{% url 'academic' %}" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'tutorial' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
+
           <div class="mb-3">
-            <label for ='dept' class="form-label">Department Name:</label>
-            <select class="form-control" id="dept" name="dept">
+            <label for ='department_name' class="form-label">Department Name:</label>
+            <select class="form-control" id="department_name" name="department_name">
               <option value="">Select</option>
               {% for dept in department_list %}
                   <option value="{{dept.department}}">{{dept.department}}</option>
@@ -239,12 +84,16 @@ Academic
             </select>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="session">Session:</label>
-            <input type="text" class="form-control" name="session" required>
+            <label class="form-label" for="faculty">faculty:</label>
+            <input type="text" class="form-control" name="faculty" required>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="pdfFile">Choose a PDF file:</label>
-            <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" required>
+            <label class="form-label" for="course_name">Course Name:</label>
+            <input type="text" class="form-control" name="course_name" required>
+          </div>
+          <div class="form-group my-2">
+            <label class="form-label" for="File">Choose a PDF file:</label>
+            <input type="file" class="form-control-file" id="file" name="file" accept=".pdf, .mp4, .avi, .mkv" required>
           </div>
           <div class="text-center m-3">
             <button type="submit" class="btn btn-primary">Upload</button>
