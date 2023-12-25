@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
+<style>
+  .card img:hover{
+    opacity: 0.6;
+  }
+</style>
 <div class="container">
   <div class="text-end m-4">
     {% if user.is_superuser %} 
@@ -14,7 +19,7 @@
   <div class="row">
     {% for achievement in achievements %}
       <div class="col-md-4 mb-4">
-        <div class="card" onclick="showDescription('{{ achievement.description }}','{{achievement.title}}','{{ achievement.image.url }}')">
+        <div class="card" onclick="showDescription('{{ achievement.description }}','{{achievement.title}}','{{ achievement.image.url }}')" title="Click to show description">
           <img height="400px" src="{{ achievement.image.url }}" class="card-img-top" alt="{{ achievement.title }}">
           <div class="card-body" style="background-color: #c1faf8;">
             <h5 class="card-title">{{ achievement.title }}</h5>
