@@ -11,9 +11,12 @@ from .models import Syllabus,Question_bank,Routine, Department, Session
 from django.db import IntegrityError
 from CCN_community.decorators import superuser
 
+# Syllabus, routine, question_bank, tutorial sob gula model ekta primary key (id) rakhis 
+# update or delete korar somoy kaje lagbe 
 
-@superuser
 def academic(request):
+    # ei method theke shudhu syllabus retrieve koris
+    # niche ekta method dichi sekhane syllabus add koris
     if request.method == 'POST':
         department = request.POST['dept_name']
         session=request.POST['session']
@@ -38,7 +41,18 @@ def academic(request):
     except Exception as e:
         return HttpResponse(e)
 
-@superuser    
+
+@superuser
+def add_syllabus(request):
+    # ekhane syllabus add koris 
+    pass 
+
+# ei rokom sob gular jonno alada add method rakhis 
+# jegular sathe superuser decoration thakbe
+
+# je method data ber korbi segula normal but jegula add/delete korbi segula
+# shudhu superuser 
+
 def routine(request):
     if request.method == 'POST':
         department = request.POST['dept_name']
@@ -63,8 +77,7 @@ def routine(request):
         return render(request,'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
-    
-@superuser    
+       
 def question_bank(request):
     if request.method == 'POST':
         department = request.POST['dept_name']
