@@ -9,8 +9,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Syllabus,Question_bank,Routine, Department, Session
 from django.db import IntegrityError
+from CCN_community.decorators import superuser
 
 
+@superuser
 def academic(request):
     if request.method == 'POST':
         department = request.POST['dept_name']
@@ -35,7 +37,8 @@ def academic(request):
         return render(request,'academic.html', context)
     except Exception as e:
         return HttpResponse(e)
-    
+
+@superuser    
 def routine(request):
     if request.method == 'POST':
         department = request.POST['dept_name']
@@ -60,6 +63,8 @@ def routine(request):
         return render(request,'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
+    
+@superuser    
 def question_bank(request):
     if request.method == 'POST':
         department = request.POST['dept_name']
@@ -76,6 +81,7 @@ def tutorial(request):
 def academic_notice(request):
     return render(request, 'academic_notice.html')
 
+@superuser
 def add_new_department(request):
     depts = Department.objects.all()
     if request.method=="POST":
@@ -94,6 +100,8 @@ def add_new_department(request):
         print(message,type)
         return render(request,'add_new_department.html',{"message":message, 'type':type, "depts":depts})
     return render(request,'add_new_department.html',{"depts":depts})
+
+@superuser
 def delete_dept(request, dept):
     if dept:
         department = Department.objects.filter(department=dept) 

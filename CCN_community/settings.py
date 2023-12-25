@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Home',
     'academic',
     'notice',
+    'achievement',
     'django_bootstrap5',
 ]
 

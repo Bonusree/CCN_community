@@ -5,8 +5,10 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.conf import settings
 import os 
+from CCN_community.decorators import superuser
 # Create your views here.
 
+@superuser
 def add_notice(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -40,6 +42,7 @@ def notice(request):
     context = {'notices':notices}
     return render(request,'notice.html',context)
 
+@superuser
 def delete_notice(request, notice_id):
     n = Notice.objects.filter(id=notice_id)
     n.delete()

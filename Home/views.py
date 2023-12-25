@@ -25,8 +25,6 @@ def show_alumni(request):
     all_alumni = User_Details.objects.filter(isAlumni=True)
     return render(request,'alumni.html',{'all_alumni':all_alumni})
 
-def achievement(request):
-    return render(request,'achievement.html')
 
 def login_view(request):
     if request.method=='POST':
