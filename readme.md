@@ -1,6 +1,8 @@
 <h1>Project Title: CCN community </h1>
-It's a django based project
-
+It's a django based project<br>
+<h4>Superuser:</h4><br>
+<b>Name: </b>admin<br>
+<b>Password: </b>123<br>
 * remove DB:
 ``` git rm .\db.sqlite3 ```
 
