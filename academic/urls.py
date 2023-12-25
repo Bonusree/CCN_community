@@ -3,6 +3,9 @@ from . import views
 
 urlpatterns = [
     path('academic/', views.academic, name='academic'),
+    path('add_syllabus/', views.add_syllabus, name='add_syllabus'),
+    path('add_routine/', views.add_routine, name='add_routine'),
+    path('add_question/', views.add_question, name='add_question'),
     path('routine/', views.routine, name='routine'),
     path('question_bank/', views.question_bank, name='question_bank'),
     path('tutorial/', views.tutorial, name='tutorial'),
