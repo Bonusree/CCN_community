@@ -18,7 +18,12 @@ Academic
       </ul>
   </div>
   <div class="col-9  p-3 text-center">
-
+    {% if request.user.is_superuser %}
+    <div class="text-end">
+      <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal"
+      data-bs-target="#add_syllabus">Add Tutorial</button>
+    </div>
+    {%endif%}
     <div id="Computer Science" class="card text-dark bg-light m-4"
     style="max-width:100%; ">
       <div class="card-header d-inline-flex ">
@@ -206,6 +211,46 @@ Academic
           <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
           <!-- Add more PDF links as needed -->
         </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal -->
+<div class="modal fade" id="add_syllabus" tabindex="-1"
+  aria-labelledby="addLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addLabel">Add the Syllabus with session</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="{% url 'academic' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for ='dept' class="form-label">Department Name:</label>
+            <select class="form-control" id="dept" name="dept">
+              <option value="">Select</option>
+              {% for dept in department_list %}
+                  <option value="{{dept.department}}">{{dept.department}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group my-2">
+            <label class="form-label" for="session">Session:</label>
+            <input type="text" class="form-control" name="session" required>
+          </div>
+          <div class="form-group my-2">
+            <label class="form-label" for="pdfFile">Choose a PDF file:</label>
+            <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" required>
+          </div>
+          <div class="text-center m-3">
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </div>
+
+        </form>
       </div>
     </div>
   </div>
