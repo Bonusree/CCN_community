@@ -20,13 +20,20 @@ Login
     .form-group {
         margin-bottom: 20px;
     }
+    img {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: -1;
+    }
 </style>
 
-<div class="container mt-4">
-    <div class="row">
+<div class="container-fluid">
+    <img src="../static/img/uni.jpg" style="filter: blur(5px); height: fit-content; width: 100%;">
+    <div class="row mt-4">
         <div class="col-md-6 mx-auto">
             <div class="form-container">
-                <h2 class="text-center">Registration</h2>
+                <h2 class="text-center">Login</h2>
                 <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
                     <div class="form-group">

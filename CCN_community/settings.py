@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Home',
     'academic',
-    'bootstrap5',
+    'notice',
+    'achievement',
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [

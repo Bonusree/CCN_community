@@ -8,8 +8,15 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
 from .models import Syllabus,Question_bank,Routine, Department, Session
+from django.db import IntegrityError
+from CCN_community.decorators import superuser
+
+# Syllabus, routine, question_bank, tutorial sob gula model ekta primary key (id) rakhis 
+# update or delete korar somoy kaje lagbe 
 
 def academic(request):
+    # ei method theke shudhu syllabus retrieve koris
+    # niche ekta method dichi sekhane syllabus add koris
     if request.method == 'POST':
         department = request.POST['dept_name']
         session=request.POST['session']
@@ -34,12 +41,18 @@ def academic(request):
         return render(request,'academic.html', context)
     except Exception as e:
         return HttpResponse(e)
-    
-from django.shortcuts import render, HttpResponse
-from .models import Department, Session, Routine
 
-from django.shortcuts import render, HttpResponse
-from .models import Department, Session, Routine
+
+@superuser
+def add_syllabus(request):
+    # ekhane syllabus add koris 
+    pass 
+
+# ei rokom sob gular jonno alada add method rakhis 
+# jegular sathe superuser decoration thakbe
+
+# je method data ber korbi segula normal but jegula add/delete korbi segula
+# shudhu superuser 
 
 def routine(request):
     try:
@@ -74,7 +87,6 @@ def routine(request):
         return render(request, 'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
-
 
 def question_bank(request):
     try:
@@ -119,3 +131,29 @@ def tutorial(request):
 def academic_notice(request):
     return render(request, 'academic_notice.html')
 
+@superuser
+def add_new_department(request):
+    depts = Department.objects.all()
+    if request.method=="POST":
+        dept = request.POST.get("dept")
+        message = None 
+        type = None
+        try:    
+            if dept:
+                Department.objects.create(department=dept)
+            else:
+                message ='Empty department name'
+        except IntegrityError as e:
+            message ='Duplicate department name'
+        if message:
+            type='bg-danger'
+        print(message,type)
+        return render(request,'add_new_department.html',{"message":message, 'type':type, "depts":depts})
+    return render(request,'add_new_department.html',{"depts":depts})
+
+@superuser
+def delete_dept(request, dept):
+    if dept:
+        department = Department.objects.filter(department=dept) 
+        department.delete()
+    return add_new_department(request)

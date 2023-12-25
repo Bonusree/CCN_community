@@ -3,7 +3,7 @@
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
-  {% load bootstrap5 %}
+  {% load django_bootstrap5 %}
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
   {% bootstrap_css %}
   {% bootstrap_javascript %}
@@ -27,10 +27,16 @@
     <script
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="{% static 'js/js.js' %}"></script>
-   
+    <style>
+        body{
+            background-image: url(../static/img/bg-1.jpg);
+        }
+    </style>
+    {% block head %}
+    {% endblock %}
     </head>
 </head>
-<body>
+<body >
 
     <nav class="navbar navbar-expand" style="background:linear-gradient(156deg, rgba(171,6,147,1) 17%, rgba(161,15,101,1) 34%, rgba(162,25,25,1) 94%); color:rgb(245, 237, 228)" >
         <div class="container-fluid">
@@ -45,22 +51,22 @@
                         <img src="{%static 'img/logo.jpeg' %}" alt="Bootstrap" width="60" height="60">
                     </li>
                     <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/">Home</a>
+                    <a class="nav-link h4 {% if request.path == '/'%}active{% endif %} link-light " href="/">Home</a>
                     </li>
                     <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/academic/">Academic</a>
+                    <a class="nav-link h4 {% if 'academic' in request.path %}active{% endif %} link-light " href="/academic/">Academic</a>
                     </li>
                     <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/blood_community/">Blood community</a>
+                    <a class="nav-link h4 {% if 'blood_community' in request.path %}active{% endif %} link-light " href="/blood_community/">Blood community</a>
                     </li>
                     <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/alumni/">Alumni</a>
+                    <a class="nav-link h4 {% if 'alumni' in request.path %}active{% endif %} link-light " href="/alumni/">Alumni</a>
                     </li>
                     <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/achievement">Achievement</a>
+                    <a class="nav-link h4 {% if 'achievement' in request.path %}active{% endif %} link-light " href="/achievement">Achievement</a>
                     </li>
                     <li class="nav-item ">
-                    <a class="nav-link h4 link-light " href="/notice/">Notice</a>
+                    <a class="nav-link h4 {% if 'notice' in request.path %}active{% endif %} link-light " href="/notice/">Notice</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav d-flex" >
@@ -75,17 +81,17 @@
                     {% else %} 
                     
                     <li class="nav-item">
-                        <a class="nav-link h4 link-light" href="/login">Login </a>
+                        <a class="nav-link h4 {% if 'login' in request.path %}active{% endif %} link-light" href="/login">Login </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link h4 link-light" href="/signup">Signup </a>
+                        <a class="nav-link h4 {% if 'signup' in request.path %}active{% endif %} link-light" href="/signup">Signup </a>
                     </li>
                     {%endif%}
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="text-center  text-white mt-2 {{type}} m-auto rounded-3 py-1" style="width: 90%;">
+    <div class="text-center  text-white {% if type %}mt-2 py-1{% endif %} {{type}} m-auto rounded-3 " style="width: 90%;">
       {{message}}
     </div>
     
