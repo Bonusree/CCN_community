@@ -3,8 +3,27 @@
 {% block title %}
 CCN community
 {% endblock %}
-
+{% block head %}
+{{block.super}}
+<style>
+  body{
+      background-image: url(../static/img/blood.jpg);
+      background-size: cover;
+  }
+  input{
+    background-color: transparent;
+    outline: none;
+    padding: 4px;
+    padding-left: 10px;
+    border-radius: 10px;
+  }
+  input::placeholder{
+    color: black;
+  }
+</style>
+{% endblock %}
 {% block content %}
+
 <div class="m-3">
   <input class="border-2 m-3" style="width: 30%;" type="text" id="myInput"
     onkeyup="myFunction()" placeholder="Search for blood group..">
