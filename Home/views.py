@@ -12,8 +12,7 @@ from .models import User_Details, Blood
 # Create your views here.
 def home(request):
     return render(request,'home.html')
-
-
+ 
 def tutorial(request):
     return render(request, 'tutorial.html')
 def academic_notice(request):
@@ -28,10 +27,6 @@ def show_alumni(request):
 
 def achievement(request):
     return render(request,'achievement.html')
-
-def notice(request):
-    return render(request,'notice.html')
-
 
 def login_view(request):
     if request.method=='POST':
@@ -110,18 +105,19 @@ def profile(request):
             _user.isAlumni=profession
             _user.address=address
             _user.save()
-            
-            # update blood information 
-            _blood , created= Blood.objects.get_or_create(user=user)
-            _blood.blood_group = blood_group
-            if last_donate:
-                _blood.last_donate = last_donate
-            _blood.phone = phone
-            _blood.save()
         
     try:
         user = User.objects.get(username=request.user.username)
         details = User_Details.objects.get(user=user)
+        if request.method=="POST":
+            # update blood information 
+            _blood, created = Blood.objects.get_or_create(user=user,user_details=details)
+            if blood_group:
+                _blood.blood_group = blood_group
+            if last_donate:
+                _blood.last_donate = last_donate
+            _blood.phone = phone
+            _blood.save()
         blood = Blood.objects.get(user=user)
         context={'details':details,'blood':blood}
     except User.DoesNotExist:

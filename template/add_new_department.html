@@ -1,0 +1,31 @@
+{% extends "master.html" %}
+
+{% block title %}
+Academic
+{% endblock %}
+{% block content %}
+<div class="container mt-5" style="width: 50%; min-width: 400px;">
+    <h2 class="text-center">Add New Department</h2>
+    <form method="POST" action="{% url 'new_dept' %}">
+        {% csrf_token %}
+        <div class="form-group my-2">
+            <label class="fw-bold" for="title">Department:</label>
+            <input type="text" class="form-control" id="dept" name="dept" required>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary my-4">Add Notice</button>
+        </div>
+    </form>
+    <div class="dept-list">
+        <h1>Department List</h1>
+        <ul>
+            {% for dept in depts %}
+            <li>
+                {{dept.department}} <a href="{% url 'delete_dept' dept=dept.department %}">delete</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
