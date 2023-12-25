@@ -7,12 +7,66 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
-from .models import Syllabus,Question_bank,Routine, Department, Session
+from .models import Syllabus,Question_bank,Routine, Department, Session, Faculty, Tutorial
 from django.db import IntegrityError
 from CCN_community.decorators import superuser
 
-# Syllabus, routine, question_bank, tutorial sob gula model ekta primary key (id) rakhis 
-# update or delete korar somoy kaje lagbe 
+def tutorial(request):
+    try:
+        if request.method == 'POST':
+            department_name = request.POST['department_name']
+            faculty_name = request.POST['faculty']
+            course_name = request.POST['course_name']
+            pdf_file = request.FILES['file']
+            
+            # Check if the department exists
+            department, created = Department.objects.get_or_create(department=department_name)
+
+            # Check if the faculty exists for the department
+            faculty, created = Faculty.objects.get_or_create(department=department, faculty_name=faculty_name)
+
+            # Delete existing Tutorial data with the same faculty and course_name
+            try:
+                Tutorial.objects.filter(faculty=faculty, course_name=course_name).delete()
+            except Exception as e:
+                print("Error during deletion:", e)
+                return HttpResponse(e)
+
+            # Create new Tutorial entry
+            try:
+                tutorial_file = Tutorial.objects.create(faculty=faculty, course_name=course_name, pdf_file=pdf_file)
+            except Exception as e:
+                print("Error during creation:", e)
+                return HttpResponse(e)
+
+            # Fetch the tutorial list and department list
+            try:
+                tutorial_list = Tutorial.objects.all().order_by('course_name')
+                department_list=Department.objects.all().order_by('department')
+                for d in department_list:
+                    print(d.department)
+                        
+                context = {'tutorial_list': tutorial_list, 'department_list': department_list}
+                return render(request, 'tutorial.html', context)
+            except Exception as e:
+                print("Error fetching data:", e)
+                return HttpResponse(e)
+
+        # Handling GET request
+        tutorial_list = Tutorial.objects.all().order_by('course_name')
+        department_list=Department.objects.all().order_by('department')
+        for d in department_list:
+            print(d.department)
+
+        context = {'tutorial_list': tutorial_list, 'department_list': department_list}
+        return render(request, 'tutorial.html', context)
+
+    except Exception as e:
+        print("Error:", e)
+        # Handle the error and render the template with an error message
+        context = {'error_message': str(e)}
+        return render(request, 'tutorial.html', context)
+
 
 def academic(request):
     try:
@@ -59,6 +113,9 @@ def add_syllabus(request):
        
             context={'syllabus_list': syllabus_list, 'department_list':department_list,'error_message': str(e)}
             return render(request,'academic.html', context)
+
+
+
        
 @superuser
 def add_routine(request):
@@ -101,6 +158,10 @@ def add_routine(request):
 
         context = {'routine_list': routine_list, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'routine.html', context)
+
+
+
+
 def routine(request):
     try:
         # Fetch the routine list and department list
@@ -111,6 +172,8 @@ def routine(request):
         return render(request, 'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
+
+
 
 def question_bank(request):
     try:
@@ -176,9 +239,10 @@ def add_question(request):
        # print(question_list.course_name)
         context = {'question_list': question_list,'course_name':course_name, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'question_bank.html', context)
+
+
     
-def tutorial(request):
-    return render(request, 'tutorial.html')
+
 def academic_notice(request):
     return render(request, 'academic_notice.html')
 
