@@ -34,9 +34,9 @@ Academic
       id="myInput"
       onkeyup="myFunction()" placeholder="Search for Department..">
     <ul class="list-unstyled text-start" id="sortable-list">
-      <li> <a class="nav-link" href="#Computer Science ">Computer Science</a></li>
-      <li><a class="nav-link" href="#Law ">law</a></li>
-      <li><a class="nav-link" href="#Pharmacy ">Pharmacy</a></li>
+      {% for department_list in department_list %}
+      <li><a class="nav-link" href="#{{ department_list.department }} ">{{ department_list.department }}</a></li>
+      {% endfor %}
     </ul>
   </div>
   
@@ -51,22 +51,32 @@ Academic
     
   </div>
   {%endif%}
-    <div id="Computer Science" class="card text-dark bg-light m-4"
-      style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">Computer Science</div>
+  {% for department_list in department_list %}
+  <div id="{{ department_list.department }}" class="card text-dark bg-light m-4"
+    style="max-width:100%; ">
+    <div class="card-header d-inline-flex ">
+      <div class="flex-fill">{{ department_list.department }}</div>
 
-      </div>
-
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2">
-          <li><a href="example1.pdf" target="_blank">2019</a></li>
-          <li><a href="example2.pdf" target="_blank">PDF Document 2</a></li>
-          <li><a href="example3.pdf" target="_blank">PDF Document 3</a></li>
-          <!-- Add more PDF links as needed -->
-        </ul>
-      </div>
     </div>
+
+    <div class="card m-4 p-3">
+      <ul  id="sortable-list2">
+      
+      {%for question_list in question_list%}
+      {% if department_list.department == question_list.question.department.department %}
+        {% if question_list.pdf_file.url %}
+          <li><a href="{{ question_list.pdf_file.url }}" target="_blank"> {{ question_list.course_name }} {{ question_list.question.session_name }}</a></li>
+        {%endif%}
+      {%endif%}
+     
+      {%endfor%}
+      </ul>
+      </ul>
+      
+    </div>
+  </div>
+{% endfor %}
+
 
   </div>
 </div>
@@ -85,10 +95,16 @@ Academic
 
         <form action="{% url 'question_bank' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
-          <label for ='dept'>Department Name:</label>
-          <input type="text" name="dept_name"><br><br>
+          <label for ='department_name'>Department Name:</label>
+          <select id="department_name" name="department_name">
+            <option label="Computer Science & Engineering">Computer Science & Engineering </option>
+            <option label="Math">Math</option>
+            <option label="Chemistry">Chemistry</option>
+          </select><br><br>
           <label for="session">Session:</label>
           <input type="text" name="session"><br><br>
+          <label for="course_name">Course name:</label>
+          <input type="text" name="course_name"><br><br>
           <label for="pdfFile">Choose a PDF file:</label>
           <input type="file" class="form-control-file" id="pdfFile"
             name="pdfFile">
