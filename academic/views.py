@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
 from .models import Syllabus,Question_bank,Routine, Department, Session
+from django.db import IntegrityError
+
 
 def academic(request):
     if request.method == 'POST':
@@ -54,7 +56,7 @@ def routine(request):
         department_list=Department.objects.all()
         for d in department_list:
             print(d.department)
-        context={'Routine_list': Routine_list, 'department_list':department_list}
+        context={'Routine_list': routine_list, 'department_list':department_list}
         return render(request,'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
@@ -74,3 +76,26 @@ def tutorial(request):
 def academic_notice(request):
     return render(request, 'academic_notice.html')
 
+def add_new_department(request):
+    depts = Department.objects.all()
+    if request.method=="POST":
+        dept = request.POST.get("dept")
+        message = None 
+        type = None
+        try:    
+            if dept:
+                Department.objects.create(department=dept)
+            else:
+                message ='Empty department name'
+        except IntegrityError as e:
+            message ='Duplicate department name'
+        if message:
+            type='bg-danger'
+        print(message,type)
+        return render(request,'add_new_department.html',{"message":message, 'type':type, "depts":depts})
+    return render(request,'add_new_department.html',{"depts":depts})
+def delete_dept(request, dept):
+    if dept:
+        department = Department.objects.filter(department=dept) 
+        department.delete()
+    return add_new_department(request)

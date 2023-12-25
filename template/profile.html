@@ -48,9 +48,9 @@
       </div>
       <div class=".profile-picture-container text-center">
         <img src="{% static 'img/User-Profile.png' %}" alt="Profile Picture">
-        <label class="">
+        <label class="" style="cursor: pointer;">
           <!-- <a href="#" style="color:black"> -->
-          <i class="fas fa-trash"></i>
+          <i title="delete profile" class="fas fa-trash"></i>
         </label>
       </div>
   </div>
@@ -115,7 +115,7 @@
     <div class="inputGroup">
       <label for="address">Blood Group:</label>
       <select name="blood_group">
-        <option {% if not blood.blood_group %}selected{% endif %}>Select</option>
+        <option value="" {% if not blood.blood_group %}selected{% endif %}>Select</option>
         <option value="A_p" {% if blood.blood_group == 'A_p' %}selected{% endif %}>A+</option>
         <option value="A_n" {% if blood.blood_group == 'A_n' %}selected{% endif %}>A-</option>
         <option value="B_p" {% if blood.blood_group == 'B_p' %}selected{% endif %}>B+</option>
