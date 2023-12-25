@@ -8,7 +8,7 @@ CCN community
 <div class="m-3">
   <input class="border-2 m-3" style="width: 30%;" type="text" id="myInput"
     onkeyup="myFunction()" placeholder="Search for blood group..">
-  <table class="table table-success table-striped m-3" id="myTable"
+  <table class="table table-success table-striped m-3" id="bloodTable"
     style="width: 98%;">
     <thead>
       <tr>
@@ -39,7 +39,7 @@ CCN community
     var input, filter, table, tr, td, i, txtValue;
     input = document.getElementById("myInput");
     filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
+    table = document.getElementById("bloodTable");
     
       tbody = table.getElementsByTagName("tbody")[0];
       tr = tbody.getElementsByTagName("tr");

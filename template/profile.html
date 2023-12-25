@@ -116,12 +116,12 @@
       <label for="address">Blood Group:</label>
       <select name="blood_group">
         <option value="" {% if not blood.blood_group %}selected{% endif %}>Select</option>
-        <option value="A_p" {% if blood.blood_group == 'A_p' %}selected{% endif %}>A+</option>
-        <option value="A_n" {% if blood.blood_group == 'A_n' %}selected{% endif %}>A-</option>
-        <option value="B_p" {% if blood.blood_group == 'B_p' %}selected{% endif %}>B+</option>
-        <option value="B_n" {% if blood.blood_group == 'B_n' %}selected{% endif %}>B-</option>
-        <option value="O_p" {% if blood.blood_group == 'O_p' %}selected{% endif %}>O+</option>
-        <option value="O_n" {% if blood.blood_group == 'O_n' %}selected{% endif %}>O-</option>
+        <option value="A+" {% if blood.blood_group == 'A+' %}selected{% endif %}>A+</option>
+        <option value="A-" {% if blood.blood_group == 'A-' %}selected{% endif %}>A-</option>
+        <option value="B+" {% if blood.blood_group == 'B+' %}selected{% endif %}>B+</option>
+        <option value="B-" {% if blood.blood_group == 'B-' %}selected{% endif %}>B-</option>
+        <option value="O+" {% if blood.blood_group == 'O+' %}selected{% endif %}>O+</option>
+        <option value="O-" {% if blood.blood_group == 'O-' %}selected{% endif %}>O-</option>
       </select>
     </div>
     <div class="inputGroup">

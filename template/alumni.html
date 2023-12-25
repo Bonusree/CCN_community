@@ -7,14 +7,13 @@ CCN community
 {% block content %}
 <div class="m-3">
     <div class="row m-3">
-        <select class="col-3 mx-2" name="searchOption">
-            <option>Select</option>
+        <select class="col-3 mx-2" name="searchOption" id="searchOption">
             <option value="session">Session</option>
             <option value="department">Department</option>
         </select>
         <input class="col-3 mx-2" placeholder="Search here ..." name="searchKey" id="searchKey" onkeyup="updateTable()">
     </div>
-    <table class="table table-success table-striped m-3 table-hover m-auto" id="myTable"
+    <table class="table table-success table-striped m-3 table-hover m-auto" id="alumniTable"
         style="width: 98%;">
         <thead>
             <tr>
@@ -39,8 +38,31 @@ CCN community
     </table>
 </div>
     <script>
-  function myFunction() {
+  function updateTable() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    var searchOption = document.getElementById('searchOption').value;
+    var column = (searchOption==='session'?1:2);
+    input = document.getElementById("searchKey");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("alumniTable");
     
+    tbody = table.getElementsByTagName("tbody")[0];
+    tr = tbody.getElementsByTagName("tr");
+
+    console.log(filter,column);
+      // Loop through all table rows, and hide those that don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[column]; 
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
     }
   </script>
 {% endblock %}
