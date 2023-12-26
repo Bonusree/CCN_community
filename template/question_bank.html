@@ -23,7 +23,7 @@ Academic
     
     <div class="text-end">
       <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal"
-      data-bs-target="#add_syllabus">Add Questions</button>
+      data-bs-target="#add_question">Add Questions</button>
   </div>
   
   {% if error_message %}
@@ -38,12 +38,64 @@ Academic
     </div>
 
     <div class="card m-4 p-3">
-      <ul  id="sortable-list2">
+      <ul id="sortable-list2" class="list-group list-group-flush">
       
       {%for question_list in question_list%}
       {% if department_list.department == question_list.question.department.department %}
         {% if question_list.pdf_file.url %}
-          <li><a href="{{ question_list.pdf_file.url }}" target="_blank"> {{ question_list.course_name }} {{ question_list.question.session_name }}</a></li>
+        <li class="list-group-item" style=" display: flex; list-style: none;
+        justify-content: space-between; align-items: center; margin-right: 10px;">
+            <a href="{{ question_list.pdf_file.url }}" target="_blank"> {{ question_list.course_name }} {{ question_list.question.session_name }}</a>
+            <div style="display:flex; justify-content:space-between; align-items: center; ">
+              <form action="{% url 'delete_question' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="hidden" name="department_name" value="{{  department_list.department}}">
+              <input type="hidden" name="session" value="{{question_list.question.session_name }}">
+              
+              <button type="submit" class="btn btn-outline-danger mx-3">Delete</button>
+              </form>
+              
+                <input type="hidden" name="department_name" value="{{  department_list.department}}">
+              <input type="hidden" name="session" value="{{question_list.question.session_name }}">
+              <button type="submit" class="btn btn-outline-info mx-3"  data-bs-toggle="modal"
+              data-bs-target="#edit_question">Edit</button>
+              
+              <div class="modal fade" id="edit_question" tabindex="-1"
+              aria-labelledby="addLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="addLabel">Add the question with session</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+
+                    <form action="{% url 'add_question' %}" method="POST" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
+                        <input type="text" class="form-control" name="department_name" value="{{  department_list.department}}">
+                      </div>
+                      <div class="form-group my-2">
+                        <label class="form-label" for="session"><strong>Session: </strong></label>
+                        <input type="text" class="form-control" name="session" value="{{question_list.question.session_name }}">
+                      </div>
+                      <div class="form-group my-2">
+                        <label class="form-label" for="pdfFile"><strong>Choose a PDF file: </strong></label>
+                        <input type="file" class="form-control-file" id="pdfFile" name="pdfFile"  value="{{ question_list.pdf_file.url }}">
+                      </div>
+                      <div class="text-center m-3">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+          </li>
         {%endif%}
       {%endif%}
      
@@ -60,7 +112,7 @@ Academic
 </div>
 
 <!-- modal -->
-<div class="modal fade" id="add_syllabus" tabindex="-1"
+<div class="modal fade" id="add_question" tabindex="-1"
   aria-labelledby="addLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">

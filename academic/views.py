@@ -75,12 +75,13 @@ def add_syllabus(request):
             # Check if the department exists
             department, created = Department.objects.get_or_create(department=department_name)
 
+
             # Check if the session exists for the department
+
             session, created = Session.objects.get_or_create(department=department, session_name=session)
 
-            Syllabus.objects.filter(syllabus=session).delete()
-            syllabus_file = Syllabus(syllabus=session, pdf_file=pdf_file)
-            syllabus_file.save()
+            syllabus_file, create = Syllabus.objects.get_or_create(syllabus=session, pdf_file=pdf_file)
+            
             syllabus_list=Syllabus.objects.all().order_by('syllabus')
             department_list=Department.objects.all().order_by('department')
             for d in department_list:
@@ -97,6 +98,110 @@ def add_syllabus(request):
             context={'syllabus_list': syllabus_list, 'department_list':department_list,'error_message': str(e)}
             return render(request,'academic.html', context)
 
+@superuser
+def delete_syllabus(request):
+    try:
+        if request.method == 'POST':
+            department_name = request.POST['department_name']
+            session_name = request.POST['session']
+            
+            department = Department.objects.filter(department=department_name).last()
+
+            # Check if the session exists for the department
+            session= Session.objects.filter(department=department, session_name=session_name).last()
+            
+            
+            try:
+                Syllabus.objects.filter(syllabus=session).delete()
+            except Exception as e:
+                print("here delete")
+                return HttpResponse(e)
+            
+            try:
+                # Fetch the routine list and department list
+                syllabus_list = Syllabus.objects.all().order_by('syllabus')
+                department_list = Department.objects.all().order_by('department')
+
+                context = {'syllabus_list': syllabus_list, 'department_list': department_list}
+                return render(request, 'academic.html', context)
+            except Exception as e:
+                return HttpResponse(e)
+    except Exception as e:
+        syllabus_list = Syllabus.objects.all().order_by('syllabus')
+        department_list = Department.objects.all().order_by('department')
+
+        context = {'syllabus_list': syllabus_list, 'department_list': department_list,'error_message': str(e)}
+        return render(request, 'academic.html', context)
+
+@superuser
+def delete_routine(request):
+    try:
+        if request.method == 'POST':
+            department_name = request.POST['department_name']
+            session_name = request.POST['session']
+            
+            department = Department.objects.filter(department=department_name).last()
+
+            # Check if the session exists for the department
+            session= Session.objects.filter(department=department, session_name=session_name).last()
+            
+            
+            try:
+                Routine.objects.filter(routine=session).delete()
+            except Exception as e:
+                print("here delete")
+                return HttpResponse(e)
+            
+            try:
+                # Fetch the routine list and department list
+                routine_list = Routine.objects.all().order_by('routine')
+                department_list = Department.objects.all().order_by('department')
+
+                context = {'routine_list': routine_list, 'department_list': department_list}
+                return render(request, 'routine.html', context)
+            except Exception as e:
+                return HttpResponse(e)
+    except Exception as e:
+        routine_list = Routine.objects.all().order_by('routine')
+        department_list = Department.objects.all().order_by('department')
+
+        context = {'routine_list': routine_list, 'department_list': department_list,'error_message': str(e)}
+        return render(request, 'routine.html', context)
+
+@superuser
+def delete_question(request):
+    try:
+        if request.method == 'POST':
+            department_name = request.POST['department_name']
+            session_name = request.POST['session']
+            
+            department = Department.objects.filter(department=department_name).last()
+
+            # Check if the session exists for the department
+            session= Session.objects.filter(department=department, session_name=session_name).last()
+            
+            
+            try:
+                Question_bank.objects.filter(question=session).delete()
+            except Exception as e:
+                print("here delete")
+                return HttpResponse(e)
+            
+            try:
+                # Fetch the routine list and department list
+                question_list = Question_bank.objects.all()
+                department_list = Department.objects.all().order_by('department')
+
+                context = {'question_list': question_list, 'department_list': department_list}
+                return render(request, 'question_bank.html', context)
+            except Exception as e:
+                return HttpResponse(e)
+    except Exception as e:
+        question_list = Question.objects.all().order_by('question')
+        department_list = Department.objects.all().order_by('department')
+
+        context = {'question_list': question_list, 'department_list': department_list,'error_message': str(e)}
+        return render(request, 'question_bank.html', context)
 
 
        
