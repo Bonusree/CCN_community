@@ -20,28 +20,11 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Faculty',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('faculty_name', models.CharField(max_length=100)),
-                ('department', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='academic.department')),
-            ],
-        ),
-        migrations.CreateModel(
             name='Session',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('session_name', models.CharField(max_length=100)),
                 ('department', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='academic.department')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Tutorial',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('course_name', models.CharField(max_length=100, null=True)),
-                ('pdf_file', models.FileField(upload_to='pdf/')),
-                ('tutorial', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='academic.faculty')),
             ],
         ),
         migrations.CreateModel(

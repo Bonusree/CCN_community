@@ -5,6 +5,7 @@ class Session(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE)
     session_name = models.CharField(max_length=100)
 class Faculty(models.Model):
+    id = models.AutoField(primary_key=True)
     department = models.ForeignKey('Department', on_delete=models.CASCADE)
     faculty_name = models.CharField(max_length=100)
 
