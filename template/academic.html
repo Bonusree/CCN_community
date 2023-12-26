@@ -40,10 +40,21 @@ Academic
 
         <div class="card m-4 p-3">
           
-          <ul id="sortable-list2">
+          <ul id="sortable-list2" class="list-group list-group-flush">
           {%for syllabus_list in syllabus_list%}
           {% if department_list.department == syllabus_list.syllabus.department.department %}
-            <li><a href="{{ syllabus_list.pdf_file.url }}" target="_blank">{{ syllabus_list.syllabus.session_name }}</a></li>
+            <li class="list-group-item" style=" display: flex; list-style: none;
+            margin-right: 10px; ">
+              <a href="{{ syllabus_list.pdf_file.url }}" target="_blank">{{ syllabus_list.syllabus.session_name }}</a>
+              <form action="{% url 'add_syllabus' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger mx-3">Delete</button>
+              </form>
+              <form action="{% url 'add_syllabus' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-info mx-3">Edit</button>
+              </form>
+            </li>
           {%endif%}
           {%endfor%}
           </ul>
@@ -69,19 +80,20 @@ Academic
         <form action="{% url 'add_syllabus' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="mb-3">
-            <label for ='department_name' class="form-label">Department Name:</label>
+            <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
             <select class="form-control" id="department_name" name="department_name">
+              
               {% for dept in department_list %}
                   <option value="{{ dept.department }}">{{ dept.department }}</option>
               {% endfor %}
           </select>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="session">Session:</label>
+            <label class="form-label" for="session"><strong>Session: </strong></label>
             <input type="text" class="form-control" name="session" required>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="pdfFile">Choose a PDF file:</label>
+            <label class="form-label" for="pdfFile"><strong>Choose a PDF file: </strong></label>
             <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" required>
           </div>
           <div class="text-center m-3">
