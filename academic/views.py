@@ -17,7 +17,7 @@ def tutorial(request):
         if request.method == 'POST':
             department_name = request.POST['department_name']
             faculty=request.POST['faculty']
-            course_name=reques.POST['course_name']
+            course_name=request.POST['course_name']
             pdf_file = request.FILES['file']
             
             # Check if the department exists
