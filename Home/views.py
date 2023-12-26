@@ -13,10 +13,7 @@ from .models import User_Details, Blood
 def home(request):
     return render(request,'home.html')
  
-def tutorial(request):
-    return render(request, 'tutorial.html')
-def academic_notice(request):
-    return render(request, 'academic_notice.html')
+
 def blood_community(request):
     bloods = Blood.objects.all()
     return render(request, 'blood_community.html',{'bloods':bloods})

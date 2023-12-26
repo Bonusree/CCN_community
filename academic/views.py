@@ -12,60 +12,43 @@ from django.db import IntegrityError
 from CCN_community.decorators import superuser
 
 def tutorial(request):
+    
     try:
         if request.method == 'POST':
             department_name = request.POST['department_name']
-            faculty_name = request.POST['faculty']
-            course_name = request.POST['course_name']
+            faculty=request.POST['faculty']
+            course_name=reques.POST['course_name']
             pdf_file = request.FILES['file']
             
             # Check if the department exists
             department, created = Department.objects.get_or_create(department=department_name)
 
-            # Check if the faculty exists for the department
-            faculty, created = Faculty.objects.get_or_create(department=department, faculty_name=faculty_name)
+            # Check if the session exists for the department
+            faculty, created = Faculty.objects.get_or_create(department=department, faculty_name=faculty)
 
-            # Delete existing Tutorial data with the same faculty and course_name
-            try:
-                Tutorial.objects.filter(faculty=faculty, course_name=course_name).delete()
-            except Exception as e:
-                print("Error during deletion:", e)
-                return HttpResponse(e)
-
-            # Create new Tutorial entry
-            try:
-                tutorial_file = Tutorial.objects.create(faculty=faculty, course_name=course_name, pdf_file=pdf_file)
-            except Exception as e:
-                print("Error during creation:", e)
-                return HttpResponse(e)
-
-            # Fetch the tutorial list and department list
-            try:
-                tutorial_list = Tutorial.objects.all().order_by('course_name')
-                department_list=Department.objects.all().order_by('department')
-                for d in department_list:
-                    print(d.department)
-                        
-                context = {'tutorial_list': tutorial_list, 'department_list': department_list}
-                return render(request, 'tutorial.html', context)
-            except Exception as e:
-                print("Error fetching data:", e)
-                return HttpResponse(e)
-
-        # Handling GET request
-        tutorial_list = Tutorial.objects.all().order_by('course_name')
+            Tutorial.objects.filter(tutorial=faculty).delete()
+            tutorial_file = Tutorial(tutorial=faculty,course_name=course_name, pdf_file=pdf_file)
+            tutorial_file.save()
+            tutorial_list=Tutorial.objects.all()
+            department_list=Department.objects.all().order_by('department')
+            for d in department_list:
+                print(d.department)
+       
+            context={'tutorial_list': tutorial_list, 'department_list':department_list}
+            return render(request,'tutorial.html', context)
+        tutorial_list=Tutorial.objects.all()
         department_list=Department.objects.all().order_by('department')
-        for d in department_list:
-            print(d.department)
-
-        context = {'tutorial_list': tutorial_list, 'department_list': department_list}
-        return render(request, 'tutorial.html', context)
-
+        print("i am here")
+        context={'tutorial_list': tutorial_list, 'department_list':department_list}
+        return render(request,'tutorial.html', context)
     except Exception as e:
-        print("Error:", e)
-        # Handle the error and render the template with an error message
-        context = {'error_message': str(e)}
-        return render(request, 'tutorial.html', context)
+            tutorial_list=Tutorial.objects.all()
+            department_list=Department.objects.all().order_by('department')
+            for d in department_list:
+                print(d.department)
+       
+            context={'tutorial_list': tutorial_list, 'department_list':department_list,'error_message': str(e)}
+            return render(request,'tutorial.html', context)
 
 
 def academic(request):

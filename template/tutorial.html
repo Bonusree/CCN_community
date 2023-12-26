@@ -43,7 +43,7 @@ Academic
       {%for tutorial_list in tutorial_list%}
       {% if department_list.department == tutorial_list.tutorial.department.department %}
         {% if tutorial_list.pdf_file.url %}
-          <li><a href="{{ tutorial_list.pdf_file.url }}" target="_blank"> {{ tutorial_list.course_name }} {{ tutorial_list.tutorial.faculty }}</a></li>
+          <li><a href="{{ tutorial_list.pdf_file.url }}" target="_blank"> {{ tutorial_list.course_name }} {{ tutorial_list.faculty.faculty_name }}</a></li>
         {%endif%}
       {%endif%}
      
@@ -92,7 +92,7 @@ Academic
             <input type="text" class="form-control" name="course_name" required>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="File">Choose a PDF file:</label>
+            <label class="form-label" for="file">Choose a PDF file:</label>
             <input type="file" class="form-control-file" id="file" name="file" accept=".pdf, .mp4, .avi, .mkv" required>
           </div>
           <div class="text-center m-3">
