@@ -2,3 +2,9 @@ Home/__pycache__
 Home/migrations
 CCN_community/__pycache__
 db.sqlite3
+Academic/__pycache__
+Academic/migrations
+Notice/__pycache__
+Notice/migrations
+Achievement/__pycache__
+Achievement/migrations
