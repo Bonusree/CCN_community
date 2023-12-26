@@ -44,16 +44,59 @@ Academic
           {%for syllabus_list in syllabus_list%}
           {% if department_list.department == syllabus_list.syllabus.department.department %}
             <li class="list-group-item" style=" display: flex; list-style: none;
-            margin-right: 10px; ">
+            justify-content: space-between; align-items: center; margin-right: 10px;">
+            
               <a href="{{ syllabus_list.pdf_file.url }}" target="_blank">{{ syllabus_list.syllabus.session_name }}</a>
-              <form action="{% url 'add_syllabus' %}" method="POST" enctype="multipart/form-data">
+              <div style="display:flex; justify-content:space-between; align-items: center; ">
+                <form action="{% url 'delete_syllabus' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="hidden" name="department_name" value="{{  department_list.department}}">
+                <input type="hidden" name="session" value="{{syllabus_list.syllabus.session_name }}">
+                
                 <button type="submit" class="btn btn-outline-danger mx-3">Delete</button>
-              </form>
-              <form action="{% url 'add_syllabus' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-info mx-3">Edit</button>
-              </form>
+                </form>
+                <form action="{% url 'delete_syllabus' %}" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <input type="hidden" name="department_name" value="{{  department_list.department}}">
+                <input type="hidden" name="session" value="{{syllabus_list.syllabus.session_name }}">
+                <button type="submit" class="btn btn-outline-info mx-3"  data-bs-toggle="modal"
+                data-bs-target="#edit_syllabus">Edit</button>
+                </form>
+                <div class="modal fade" id="edit_syllabus" tabindex="-1"
+                aria-labelledby="addLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="addLabel">Add the Syllabus with session</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                      <form action="{% url 'add_syllabus' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                          <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
+                          <input type="text" class="form-control" name="department_name" value="{{  department_list.department}}">
+                        </div>
+                        <div class="form-group my-2">
+                          <label class="form-label" for="session"><strong>Session: </strong></label>
+                          <input type="text" class="form-control" name="session" value="{{syllabus_list.syllabus.session_name }}">
+                        </div>
+                        <div class="form-group my-2">
+                          <label class="form-label" for="pdfFile"><strong>Choose a PDF file: </strong></label>
+                          <input type="file" class="form-control-file" id="pdfFile" name="pdfFile"  value="{{ syllabus_list.pdf_file.url }}">
+                        </div>
+                        <div class="text-center m-3">
+                          <button type="submit" class="btn btn-primary">Edit</button>
+                        </div>
+
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              
+              </div>
             </li>
           {%endif%}
           {%endfor%}
