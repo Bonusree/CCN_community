@@ -163,11 +163,8 @@ def question_bank(request):
         # Fetch the routine list and department list
         question_list = Question_bank.objects.all().order_by('course_name')
         department_list = Department.objects.all().order_by('department')
-        course_names = [question.course_name for question in question_list]
-        for course_name in course_names:
-            print(course_name)
-       # print(question_list.course_name)
-        context = {'question_list': question_list,'course_name':course_name, 'department_list': department_list}
+        
+        context = {'question_list': question_list, 'department_list': department_list}
         return render(request, 'question_bank.html', context)
     except Exception as e:
         return HttpResponse(e)
