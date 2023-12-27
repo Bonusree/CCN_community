@@ -3,16 +3,16 @@
   <div class="container-fluid  justify-content-center">
     <ul class="navbar-nav  ">
       <li class="nav-item  ">
-        <a class="nav-link {% if 'academic' in request.path %}active{% endif %} ms-3" href="/academic/">Syllabus</a>
+        <a class="nav-link {% if 'syllabus' in request.path %}active{% endif %} ms-3" href="{% url 'academic' %}">Syllabus</a>
       </li>
       <li class="nav-item ">
-        <a class="nav-link {% if 'routine' in request.path %}active{% endif %}  ms-3" href="/routine/">Routine</a>
+        <a class="nav-link {% if 'routine' in request.path %}active{% endif %}  ms-3" href="{% url 'routine' %}">Routine</a>
       </li>
       <li class="nav-item ">
-        <a class="nav-link {% if 'question_bank' in request.path %}active{% endif %}  ms-3 " href="/question_bank/">Question Bank</a>
+        <a class="nav-link {% if 'question_bank' in request.path %}active{% endif %}  ms-3 " href="{% url 'question_bank' %}">Question Bank</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {% if 'tutorial' in request.path %}active{% endif %}  ms-3" href="/tutorial/">Tutorial</a>
+        <a class="nav-link {% if 'tutorial' in request.path %}active{% endif %}  ms-3" href="{% url 'tutorial' %}">Tutorial</a>
       </li>
     </ul>
   </div>
