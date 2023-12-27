@@ -5,7 +5,6 @@ class Session(models.Model):
     department = models.ForeignKey('Department', on_delete=models.CASCADE)
     session_name = models.CharField(max_length=100)
 class Faculty(models.Model):
-    id = models.AutoField(primary_key=True)
     department = models.ForeignKey('Department', on_delete=models.CASCADE)
     faculty_name = models.CharField(max_length=100)
 
@@ -22,12 +21,16 @@ class Routine(models.Model):
 
 
 class Question_bank(models.Model):
-    question = models.ForeignKey('Session', on_delete=models.CASCADE)
+    session = models.ForeignKey('Session', on_delete=models.CASCADE)
+    faculty=models.ForeignKey('Faculty', on_delete=models.CASCADE)
     course_name = models.CharField(max_length=100,null=True)
+    course_code = models.CharField(max_length=100,null=True)
     pdf_file = models.FileField(upload_to='pdf/')
     
 class Tutorial(models.Model):
-    tutorial = models.ForeignKey('Faculty', on_delete=models.CASCADE)
+    session = models.ForeignKey('Session', on_delete=models.CASCADE)
+    faculty=models.ForeignKey('Faculty', on_delete=models.CASCADE)
     course_name = models.CharField(max_length=100, null=True)
+    course_code = models.CharField(max_length=100,null=True)
     pdf_file = models.FileField(upload_to='pdf/')
 
