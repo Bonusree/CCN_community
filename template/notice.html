@@ -13,41 +13,44 @@ Notice
 </style>
 {% endblock %}
 {% block content %}
-<div class="row">
-  <div class="col  p-3 text-center">
-    <div class="text-end m-4">
-      {% if user.is_superuser %} 
-        <A class="btn btn-info" href="{% url 'add_notice' %}">Add Notice</A>
-      {% endif %}
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col  p-3 text-center">
+      <div class="text-end m-4">
+        {% if user.is_superuser %} 
+          <A class="btn btn-info" href="{% url 'add_notice' %}">Add Notice</A>
+        {% endif %}
+      </div>
+      <h1 class="text-center bg-white ">Notices</h1>
+      <table class="table table-light table-striped ">
+        <tr>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Department</th>
+          <th>PDF</th>
+          {% if user.is_superuser %}
+          <th>Action</th>
+          {% endif %}
+        </tr>
+        {% for notice in notices %}
+        <tr>
+          <td>{{notice.title}}</td>
+          <td>{{notice.category}}</td>
+          <td>{{notice.department.department}}</td>
+          <td>
+            <a href="{% url 'download_pdf' notice_id=notice.id %}">View</a>
+          </td>
+          {% if user.is_superuser %}
+          <th>
+            <a href="{% url 'delete_notice' notice_id=notice.id %}">Delete</a>
+          </th>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+      
     </div>
-    <h1 class="text-center bg-white ">Notices</h1>
-    <table class="table table-light table-striped ">
-      <tr>
-        <th>Title</th>
-        <th>Category</th>
-        <th>Department</th>
-        <th>PDF</th>
-        {% if user.is_superuser %}
-        <th>Action</th>
-        {% endif %}
-      </tr>
-      {% for notice in notices %}
-      <tr>
-        <td>{{notice.title}}</td>
-        <td>{{notice.category}}</td>
-        <td>{{notice.department.department}}</td>
-        <td>
-          <a href="{% url 'download_pdf' notice_id=notice.id %}">View</a>
-        </td>
-        {% if user.is_superuser %}
-        <th>
-          <a href="{% url 'delete_notice' notice_id=notice.id %}">Delete</a>
-        </th>
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </table>
-    
   </div>
 </div>
 {% endblock %}
