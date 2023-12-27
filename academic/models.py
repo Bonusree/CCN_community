@@ -17,6 +17,7 @@ class Syllabus(models.Model):
 
 class Routine(models.Model):
     routine = models.ForeignKey('Session', on_delete=models.CASCADE)
+    semester=models.CharField(max_length=100,null=True)
     pdf_file = models.FileField(upload_to='pdf/')
 
 
