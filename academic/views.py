@@ -47,8 +47,12 @@ def question_bank(request):
         # Fetch the tutorial list and department list
         question_list = Question_bank.objects.all().order_by('course_name')
         department_list = Department.objects.all().order_by('department')
-        
+        for q in question_list:
+            print(q.course_code, q.course_name, q.session.session_name, q.session.department.department)
+        for d in department_list:
+            print(d.department)
         context = {'question_list': question_list, 'department_list': department_list}
+        print("question")
         return render(request, 'question_bank.html', context)
     except Exception as e:
         return HttpResponse(e)
@@ -94,8 +98,17 @@ def add_routine(request):
         if request.method == 'POST':
             department_name = request.POST['department_name']
             session_name = request.POST['session']
+            semester=request.POST['semester']
             pdf_file = request.FILES['pdfFile']
-            
+            semester=str(semester)
+            if semester=='1':
+                semester+="st "
+            elif semester=='2':
+                semester+="nd"
+            elif semester=='3':
+                semester+="rd"
+            else:
+                semester+="th"
             # Check if the department exists
             department, created = Department.objects.get_or_create(department=department_name)
 
@@ -104,32 +117,24 @@ def add_routine(request):
             print(session)
             # Delete existing Routine data with the same department and session
             try:
-                Routine.objects.filter(routine=session).delete()
+                Routine.objects.filter(routine=session, semester=semester).delete()
             except Exception as e:
                 print("here delete")
                 return HttpResponse(e)
             # Create new Routine entry
             try:
-                routine_file = Routine.objects.create(routine=session, pdf_file=pdf_file)
+                routine_file = Routine.objects.create(routine=session,semester=semester, pdf_file=pdf_file)
             except Exception as e:
                 print("here")
                 return HttpResponse(e)
-            try:
-                # Fetch the tutorial list and department list
-                routine_list = Routine.objects.all().order_by('routine')
-                department_list = Department.objects.all().order_by('department')
-
-                context = {'routine_list': routine_list, 'department_list': department_list}
-                return render(request, 'routine.html', context)
-            except Exception as e:
-                return HttpResponse(e)
+            return redirect(routine)
     except Exception as e:
         routine_list = Routine.objects.all().order_by('routine')
         department_list = Department.objects.all().order_by('department')
 
         context = {'routine_list': routine_list, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'routine.html', context)
-
+@login_required
 def add_question(request):
     try:
         if request.method == 'POST':
@@ -138,7 +143,7 @@ def add_question(request):
             session_name = request.POST['session']
             course_name=request.POST['course_name']
             course_code=request.POST['course_code']
-            pdf_file = request.FILES['file']
+            pdf_file = request.FILES['pdfFile']
             
             # Check if the department exists
             department, created = Department.objects.get_or_create(department=department_name)
@@ -179,7 +184,7 @@ def add_question(request):
         context = {'question_list': question_list, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'question_bank.html', context)
 
-
+@login_required
 def add_tutorial(request):
     
     try:
@@ -197,21 +202,11 @@ def add_tutorial(request):
             session, created = Session.objects.get_or_create(department=department, session_name=session_name)
             faculty, created = Faculty.objects.get_or_create(department=department, faculty_name=faculty)
 
-            Tutorial.objects.filter(tutorial=faculty).delete()
+            Tutorial.objects.filter(faculty=faculty, session=session, course_code=course_code, course_name=course_name).delete()
             tutorial_file = Tutorial(session=session, faculty=faculty,course_name=course_name,course_code=course_code, pdf_file=pdf_file)
             tutorial_file.save()
-            tutorial_list=Tutorial.objects.all()
-            department_list=Department.objects.all().order_by('department')
-            for d in department_list:
-                print(d.department)
-       
-            context={'tutorial_list': tutorial_list, 'department_list':department_list}
-            return render(request,'tutorial.html', context)
-        tutorial_list=Tutorial.objects.all()
-        department_list=Department.objects.all().order_by('department')
-        print("i am here")
-        context={'tutorial_list': tutorial_list, 'department_list':department_list}
-        return render(request,'tutorial.html', context)
+            return redirect(tutorial)
+        return redirect(tutorial)
     except Exception as e:
             tutorial_list=Tutorial.objects.all()
             department_list=Department.objects.all().order_by('department')
@@ -220,7 +215,7 @@ def add_tutorial(request):
        
             context={'tutorial_list': tutorial_list, 'department_list':department_list,'error_message': str(e)}
             return render(request,'tutorial.html', context)
-
+@login_required
 def delete_tutorial(request):
     try:
         if request.method == 'POST':
@@ -300,28 +295,18 @@ def delete_routine(request):
         if request.method == 'POST':
             department_name = request.POST['department_name']
             session_name = request.POST['session']
-            
+            semester=request.POST['semester']
             department = Department.objects.filter(department=department_name).last()
 
-            # Check if the session exists for the department
             session= Session.objects.filter(department=department, session_name=session_name).last()
-            
+            print(semester)
             
             try:
-                Routine.objects.filter(routine=session).delete()
+                Routine.objects.filter(routine=session,semester=semester).delete()
             except Exception as e:
                 print("here delete")
                 return HttpResponse(e)
-            
-            try:
-                # Fetch the tutorial list and department list
-                routine_list = Routine.objects.all().order_by('routine')
-                department_list = Department.objects.all().order_by('department')
-
-                context = {'routine_list': routine_list, 'department_list': department_list}
-                return render(request, 'routine.html', context)
-            except Exception as e:
-                return HttpResponse(e)
+            return redirect(routine)
     except Exception as e:
         routine_list = Routine.objects.all().order_by('routine')
         department_list = Department.objects.all().order_by('department')
@@ -329,34 +314,29 @@ def delete_routine(request):
         context = {'routine_list': routine_list, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'routine.html', context)
 
-@superuser
+@login_required
 def delete_question(request):
     try:
         if request.method == 'POST':
             department_name = request.POST['department_name']
             session_name = request.POST['session']
-            
+            faculty=request.POST['faculty']
+            course_code=request.POST['course_code']
+            course_name=request.POST['course_name']
             department = Department.objects.filter(department=department_name).last()
 
             # Check if the session exists for the department
             session= Session.objects.filter(department=department, session_name=session_name).last()
+            faculty= Faculty.objects.filter(department=department, faculty_name=faculty).last()
             
             
             try:
-                Question_bank.objects.filter(question=session).delete()
+                Question_bank.objects.filter(session=session, faculty=faculty, course_code=course_code, course_name=course_name).delete()
             except Exception as e:
                 print("here delete")
                 return HttpResponse(e)
             
-            try:
-                # Fetch the tutorial list and department list
-                question_list = Question_bank.objects.all()
-                department_list = Department.objects.all().order_by('department')
-
-                context = {'question_list': question_list, 'department_list': department_list}
-                return render(request, 'question_bank.html', context)
-            except Exception as e:
-                return HttpResponse(e)
+            return redirect(question_bank)
     except Exception as e:
         question_list = Question_bank.objects.all().order_by('question')
         department_list = Department.objects.all().order_by('department')
