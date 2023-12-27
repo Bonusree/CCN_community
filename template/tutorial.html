@@ -21,98 +21,46 @@ tutorial
     </div>
     
     <div class="col-9  p-3 text-center">
-      {% if request.user.is_superuser %}
+      {% if request.user.is_authenticated %}
       <div class="text-end">
         <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal"
         data-bs-target="#tutorial">Add tutorial</button>
-    </div>
-    {%endif%}
-    {% if error_message %}
-          <p style="color: red;">Error: {{ error_message|upper }}</p>
-    {% endif %}
-    {% for department_list in department_list %}
-    <div id="{{ department_list.department }}" class="card text-dark bg-light m-4"
-      style="max-width:100%; ">
-      <div class="card-header d-inline-flex ">
-        <div class="flex-fill">{{ department_list.department }}</div>
-  
       </div>
-  
-      <div class="card m-4 p-3">
-        <ul id="sortable-list2" class="list-group list-group-flush">
-        
-        {%for tutorial_list in tutorial_list%}
-        {% if department_list.department == tutorial_list.tutorial.department.department %}
-          {% if tutorial_list.pdf_file.url %}
-          <li class="list-group-item" style=" display: flex; list-style: none;
-          justify-content: space-between; align-items: center; margin-right: 10px;">
-              <a href="{{ tutorial_list.pdf_file.url }}" target="_blank"> {{ tutorial_list.course_name }} {{ tutorial_list.tutorial.faculty_name }}</a>
-              <div style="display:flex; justify-content:space-between; align-items: center; ">
-                <form action="{% url 'delete_tutorial' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="department_name" value="{{  department_list.department}}">
-                <input type="hidden" name="faculty" value="{{tutorial_list.tutorial.faculty_name }}">
-                
-                <button type="submit" class="btn btn-outline-danger mx-3">Delete</button>
-                </form>
-                <form action="{% url 'delete_tutorial' %}" method="POST" enctype="multipart/form-data">
-                  {% csrf_token %}
-                  <input type="hidden" name="department_name" value="{{  department_list.department}}">
-                <input type="hidden" name="faculty" value="{{tutorial_list.tutorial.faculty_name }}">
-                <input type="hidden" name="course_name" value="{{tutorial_list.course_name }}">
-                <button type="submit" class="btn btn-outline-info mx-3"  data-bs-toggle="modal"
-                data-bs-target="#edit_tutorial">Edit</button>
-                </form>
-                <div class="modal fade" id="edit_tutorial" tabindex="-1"
-                aria-labelledby="addLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="addLabel">Add the tutorial with faculty</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-
-                      <form action="{% url 'tutorial' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                          <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
-                          <input type="text" class="form-control" name="department_name" value="{{  department_list.department}}">
-                        </div>
-                        <div class="form-group my-2">
-                          <label class="form-label" for="faculty"><strong>faculty: </strong></label>
-                          <input type="text" class="form-control" name="faculty" value="{{tutorial_list.tutorial.faculty_name }}">
-                        </div>
-                        <div class="form-group my-2">
-                          <label class="form-label" for="course_name"><strong>Course Name:</strong></label>
-                          <input type="text" class="form-control" name="course_name" required>
-                        </div>
-                        <div class="form-group my-2">
-                          <label class="form-label" for="pdfFile"><strong>Choose a PDF file: </strong></label>
-                          <input type="file" class="form-control-file" id="pdfFile" name="pdfFile"  value="{{ tutorial_list.pdf_file.url }}">
-                        </div>
-                        <div class="text-center m-3">
-                          <button type="submit" class="btn btn-primary">Edit</button>
-                        </div>
-
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              
-              </div>
-            </li>
-          {%endif%}
-        {%endif%}
-       
-        {%endfor%}
-        </ul>
-       
-        
+      {%endif%}
+      
+      {% for dept, dept_tutorials in tutorials.items %}
+      <div id="{{ dept }}" class="card text-dark bg-light m-4" style="max-width:100%;">
+          <div class="card-header d-inline-flex">
+              <div class="flex-fill">{{ dept }}</div>
+          </div>
+          <div class="card">
+            <table class="table table-striped">
+              <tr class="bg-info">
+                <th>Topic</th>
+                <th>Course name</th>
+                <th>Course code</th>
+                <th>Source</th>
+                <th>Action</th>
+              </tr>
+              {% for tut in dept_tutorials %}
+              <tr>
+                <td>{{tut.title}}</td>
+                <td>{{tut.course_name}}</td>
+                <td>{{tut.course_code}}</td>
+                <td><a href="{{tut.video_url}}" target="_blank">Video</a></td>
+                <td>
+                  <form action="{% url 'tutorial' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="number" name="id" value="{{tut.id}}"  hidden>
+                    <button class="border-0 bg-light text-danger fw-bold">Delete</button>
+                  </form>                
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
       </div>
-    </div>
-  {% endfor %}
+      {% endfor %}
   
   </div>
 </div>
@@ -123,7 +71,7 @@ tutorial
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addLabel">Add the tutorial with faculty</h5>
+        <h5 class="modal-title" id="addLabel">Add the tutorial</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
@@ -132,25 +80,32 @@ tutorial
         <form action="{% url 'tutorial' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="mb-3">
-            <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
-
-            <select class="form-control" id="department_name" name="department_name">
-              {% for dept in department_list %}
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+          </div>
+          <div class="mb-3">
+            <label for ='dept' class="form-label">Department Name: </label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
+            <select class="form-control" id="dept" name="dept" required>
+              {% for dept in depts %}
                   <option value="{{dept.department}}">{{dept.department}}</option>
               {% endfor %}
             </select>
           </div>
-          <div class="form-group my-2">
-            <label class="form-label" for="faculty"><strong>Faculty:</strong></label>
-            <input type="text" class="form-control" name="faculty" required>
+          <div class="mb-3">
+            <label for="course_name" class="form-label">Course Name:</label>
+            <input type="text" class="form-control" id="course_name" name="course_name" required>
+          </div>
+          <div class="mb-3">
+            <label for="course_code" class="form-label">Course Code:</label>
+            <input type="text" class="form-control" id="course_code" name="course_code" required>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="course_name"><strong>Course Name:</strong></label>
-            <input type="text" class="form-control" name="course_name" required>
+            <label class="form-label" for="faculty">Course teacher:</label>
+            <input type="text" class="form-control" name="faculty" >
           </div>
-          <div class="form-group my-2">
-            <label class="form-label" for="pdfFile"><strong>Choose a PDF file:</strong></label>
-            <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" required>
+          <div class="mb-3">
+            <label for="video_url" class="form-label">Video URL (youtube):</label>
+            <input type="url" class="form-control" id="video_url" name="video_url">
           </div>
           <div class="text-center m-3">
             <button type="submit" class="btn btn-primary">Upload</button>

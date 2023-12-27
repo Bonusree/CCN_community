@@ -3,23 +3,16 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import make_password  # Import this for securely hashing the password
 from django.contrib.auth import authenticate, login, logout
-
+from django.views import View
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from django.contrib.auth.models import User
 from .models import Syllabus,Question_bank,Routine, Department, Session, Faculty, Tutorial
 from django.db import IntegrityError
 from CCN_community.decorators import superuser
 
-def tutorial(request):
-    try:
-        tutorial_list=Tutorial.objects.all()
-        department_list=Department.objects.all().order_by('department')
-        
-        context={'tutorial_list': tutorial_list, 'department_list':department_list}
-        return render(request,'tutorial.html', context)
-    except Exception as e:
-        return HttpResponse(e)
+ 
 def routine(request):
     try:
         # Fetch the tutorial list and department list
@@ -180,83 +173,60 @@ def add_question(request):
         return render(request, 'question_bank.html', context)
 
 
-def add_tutorial(request):
+class TutorialView(View):
+    context = {}
+    def __init__(self) -> None:
+        self.context = {}
+        pass
     
-    try:
-        if request.method == 'POST':
-            department_name = request.POST['department_name']
-            faculty=request.POST['faculty']
-            session_name = request.POST['session']
-            course_name=request.POST['course_name']
-            course_code=request.POST['course_code']
-            pdf_file = request.FILES['file']
+    def get(self, request):
+        try:
+            tutorial_list=Tutorial.objects.all()
+            depts = Department.objects.all()
+            tutorials = {}
+            for tut in tutorial_list:
+                if tut.dept.department not in tutorials:
+                    tutorials[tut.dept.department] = []
+                tutorials[tut.dept.department].append(tut)
+            self.context['tutorials']= tutorials
+            self.context['depts']= depts
+            return render(request,'tutorial.html', self.context)
+        except Exception as e:
+            return HttpResponse(e)
+        
+    @method_decorator(login_required)
+    def post(self,request):
+        if request.POST.get('id'):
+            id = request.POST.get('id')
+            Tutorial.objects.filter(id=id).delete()
+            return redirect('tutorial')
+        try:
+            title = request.POST.get('title')
+            dept = request.POST.get('dept')  
+            course_name = request.POST.get('course_name')
+            course_code = request.POST.get('course_code')
+            video_url = request.POST.get('video_url')
             
+                
             # Check if the department exists
-            department, created = Department.objects.get_or_create(department=department_name)
-
-            session, created = Session.objects.get_or_create(department=department, session_name=session_name)
-            faculty, created = Faculty.objects.get_or_create(department=department, faculty_name=faculty)
-
-            Tutorial.objects.filter(tutorial=faculty).delete()
-            tutorial_file = Tutorial(session=session, faculty=faculty,course_name=course_name,course_code=course_code, pdf_file=pdf_file)
-            tutorial_file.save()
-            tutorial_list=Tutorial.objects.all()
-            department_list=Department.objects.all().order_by('department')
-            for d in department_list:
-                print(d.department)
-       
-            context={'tutorial_list': tutorial_list, 'department_list':department_list}
-            return render(request,'tutorial.html', context)
-        tutorial_list=Tutorial.objects.all()
-        department_list=Department.objects.all().order_by('department')
-        print("i am here")
-        context={'tutorial_list': tutorial_list, 'department_list':department_list}
-        return render(request,'tutorial.html', context)
-    except Exception as e:
-            tutorial_list=Tutorial.objects.all()
-            department_list=Department.objects.all().order_by('department')
-            for d in department_list:
-                print(d.department)
-       
-            context={'tutorial_list': tutorial_list, 'department_list':department_list,'error_message': str(e)}
-            return render(request,'tutorial.html', context)
-
-def delete_tutorial(request):
-    try:
-        if request.method == 'POST':
-            department_name = request.POST['department_name']
-            faculty_name = request.POST['faculty']
-            course_name=request.POST['course_name']
-            course_code=request.POST['course_code']
-            department = Department.objects.filter(department=department_name).last()
-
+            dept = Department.objects.get(department=dept)
+            user = User.objects.get(username=request.user)
+            tutorial = Tutorial(
+                title=title,
+                course_name=course_name,
+                course_code=course_code,
+                video_url=video_url,
+                dept = dept,
+                added_by = user,
+            )
+            tutorial.save()
+            self.context['message'] = "Successfully added"
+            self.context['type']="bg-success"
+        except Exception as e:
+            self.context['message']=f"error: {e}"
+            self.context['type']="bg-danger"
             
-            faculty= Faculty.objects.filter(department=department, faculty_name=session_name).last()
-            
-            
-            try:
-                Tutorial.objects.filter(tutorial=faculty, course_code=course_code, course_name=course_name).delete()
-            except Exception as e:
-                print("here delete")
-                return HttpResponse(e)
-            
-            try:
-                # Fetch the tutorial list and department list
-                tutorial_list = Tutorial.objects.all().order_by('tutorial')
-                department_list = Department.objects.all().order_by('department')
-
-                context = {'tutorial_list': tutorial_list, 'department_list': department_list}
-                return render(request, 'tutorial.html', context)
-            except Exception as e:
-                return HttpResponse(e)
-    except Exception as e:
-        tutorial_list = Tutorial.objects.all().order_by('tutorial')
-        department_list = Department.objects.all().order_by('department')
-
-        context = {'tutorial_list': tutorial_list, 'department_list': department_list,'error_message': str(e)}
-        return render(request, 'tutorial.html', context)
-
-
+        return redirect('tutorial')
 
 
 @superuser
@@ -325,10 +295,10 @@ def delete_routine(request):
     except Exception as e:
         routine_list = Routine.objects.all().order_by('routine')
         department_list = Department.objects.all().order_by('department')
-
         context = {'routine_list': routine_list, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'routine.html', context)
 
+    
 @superuser
 def delete_question(request):
     try:
