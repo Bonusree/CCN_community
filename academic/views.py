@@ -358,7 +358,7 @@ def delete_question(request):
             except Exception as e:
                 return HttpResponse(e)
     except Exception as e:
-        question_list = Question.objects.all().order_by('question')
+        question_list = Question_bank.objects.all().order_by('question')
         department_list = Department.objects.all().order_by('department')
 
         context = {'question_list': question_list, 'department_list': department_list,'error_message': str(e)}
