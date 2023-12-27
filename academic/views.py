@@ -211,7 +211,6 @@ class TutorialView(View):
             course_name = request.POST.get('course_name')
             course_code = request.POST.get('course_code')
             video_url = request.POST.get('video_url')
-            
                 
             # Check if the department exists
             dept = Department.objects.get(department=dept)
