@@ -7,119 +7,80 @@ Academic
 {% include 'academic_header' %}
 
 <div class="row">
-  
+
   <div class="col-3 col_color p-3 text-center" style="height: auto;">
-    <input class="border-0 m-2 rounded-3" style="width: 100%;" type="text"
-      id="myInput"
-      onkeyup="myFunction()" placeholder="Search for Department..">
+    <input class="border-0 m-2 rounded-3" style="width: 100%;" type="text" id="myInput" onkeyup="myFunction()"
+      placeholder="Search for Department..">
     <ul class="list-unstyled text-start" id="sortable-list">
       {% for department_list in department_list %}
       <li><a class="nav-link" href="#{{ department_list.department }} ">{{ department_list.department }}</a></li>
       {% endfor %}
     </ul>
   </div>
-  
-  <div class="col-9  p-3 text-center">
-    
-    <div class="text-end">
-      <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal"
-      data-bs-target="#add_question">Add Questions</button>
-  </div>
-  
-  {% if error_message %}
-        <p style="color: red;">Error: {{ error_message|upper }}</p>
-  {% endif %}
-  {% for department_list in department_list %}
-  <div id="{{ department_list.department }}" class="card text-dark bg-light m-4"
-    style="max-width:100%; ">
-    <div class="card-header d-inline-flex ">
-      <div class="flex-fill">{{ department_list.department }}</div>
 
+  <div class="col-9  p-3 text-center">
+
+    <div class="text-end">
+      <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal" data-bs-target="#add_question">Add
+        Questions</button>
     </div>
 
-    <div class="card m-4 p-3">
-      <ul id="sortable-list2" class="list-group list-group-flush">
-      
-      {%for question_list in question_list%}
-      {% if department_list.department == question_list.question.department.department %}
-        {% if question_list.pdf_file.url %}
-        <li class="list-group-item" style=" display: flex; list-style: none;
-        justify-content: space-between; align-items: center; margin-right: 10px;">
-            <a href="{{ question_list.pdf_file.url }}" target="_blank"> {{ question_list.course_name }} {{ question_list.question.session_name }}</a>
+    {% if error_message %}
+    <p style="color: red;">Error: {{ error_message|upper }}</p>
+    {% endif %}
+    {% for department_list in department_list %}
+    <div id="{{ department_list.department }}" class="card text-dark bg-light m-4" style="max-width:100%; ">
+      <div class="card-header d-inline-flex ">
+        <div class="flex-fill">{{ department_list.department }}</div>
+
+      </div>
+
+      <div class="card m-4 p-3">
+        <ul id="sortable-list2" class="list-group list-group-flush">
+
+          {%for question_list in question_list%}
+          {% if department_list.department == question_list.session.department.department %}
+          {% if question_list.pdf_file.url %}
+          <li class="list-group-item" style=" display: flex; list-style: none;
+          justify-content: space-between; align-items: center; margin-right: 10px;">
+            <a href="{{ question_list.pdf_file.url }}" target="_blank">{{ question_list.course_code}} {{ question_list.course_name }}
+              {{question_list.session.session_name }} {{question_list.faculty.faculty_name}}</a>
             <div style="display:flex; justify-content:space-between; align-items: center; ">
               <form action="{% url 'delete_question' %}" method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              <input type="hidden" name="department_name" value="{{  department_list.department}}">
-              <input type="hidden" name="session" value="{{question_list.question.session_name }}">
-              
-              <button type="submit" class="btn btn-outline-danger mx-3">Delete</button>
+                {% csrf_token %}
+                <input type="hidden" name="department_name" value="{{  department_list.department}}">
+                <input type="hidden" name="session" value="{{question_list.session.session_name }}">
+                <input type="hidden" name="faculty" value="{{question_list.faculty.faculty_name }}">
+                <input type="hidden" name="course_name" value="{{question_list.course_name }}">
+                <input type="hidden" name="course_code" value="{{question_list.course_code }}">
+                <button type="submit" class="btn btn-outline-danger mx-3">Delete</button>
               </form>
               
-                <input type="hidden" name="department_name" value="{{  department_list.department}}">
-              <input type="hidden" name="session" value="{{question_list.question.session_name }}">
-              <button type="submit" class="btn btn-outline-info mx-3"  data-bs-toggle="modal"
-              data-bs-target="#edit_question">Edit</button>
-              
-              <div class="modal fade" id="edit_question" tabindex="-1"
-              aria-labelledby="addLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="addLabel">Add the question with session</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                      aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
 
-                    <form action="{% url 'add_question' %}" method="POST" enctype="multipart/form-data">
-                      {% csrf_token %}
-                      <div class="mb-3">
-                        <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
-                        <input type="text" class="form-control" name="department_name" value="{{  department_list.department}}">
-                      </div>
-                      <div class="form-group my-2">
-                        <label class="form-label" for="session"><strong>Session: </strong></label>
-                        <input type="text" class="form-control" name="session" value="{{question_list.question.session_name }}">
-                      </div>
-                      <div class="form-group my-2">
-                        <label class="form-label" for="pdfFile"><strong>Choose a PDF file: </strong></label>
-                        <input type="file" class="form-control-file" id="pdfFile" name="pdfFile"  value="{{ question_list.pdf_file.url }}">
-                      </div>
-                      <div class="text-center m-3">
-                        <button type="submit" class="btn btn-primary">Edit</button>
-                      </div>
-
-                    </form>
-                  </div>
-                </div>
-              </div>
-            
             </div>
           </li>
-        {%endif%}
-      {%endif%}
-     
-      {%endfor%}
-      </ul>
-      </ul>
-      
+          {%endif%}
+          {%endif%}
+
+          {%endfor%}
+        </ul>
+
+
+      </div>
     </div>
-  </div>
-{% endfor %}
+    {% endfor %}
 
 
   </div>
 </div>
 
 <!-- modal -->
-<div class="modal fade" id="add_question" tabindex="-1"
-  aria-labelledby="addLabel" aria-hidden="true">
+<div class="modal fade" id="add_question" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addLabel">Add the Question</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
@@ -127,24 +88,33 @@ Academic
           {% csrf_token %}
 
           <div class="mb-3">
-            <label for ='department_name' class="form-label">Department Name:</label>
+            <label for='department_name' class="form-label"><strong>Department Name:</strong> </label><a
+              href="{% url 'new_dept' %}" target="_blank">New department</a>
             <select class="form-control" id="department_name" name="department_name">
               <option value="">Select</option>
               {% for dept in department_list %}
-                  <option value="{{dept.department}}">{{dept.department}}</option>
+              <option value="{{dept.department}}">{{dept.department}}</option>
               {% endfor %}
             </select>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="session">Session:</label>
+            <label class="form-label" for="session"><strong>Session: </strong></label>
             <input type="text" class="form-control" name="session" required>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="course_name">Course Name:</label>
+            <label class="form-label" for="faculty"><strong>Faculty</strong></label>
+            <input type="text" class="form-control" name="faculty" required>
+          </div>
+          <div class="form-group my-2">
+            <label class="form-label" for="course_code"><strong>Course Code:</strong></label>
+            <input type="text" class="form-control" name="course_code" required>
+          </div>
+          <div class="form-group my-2">
+            <label class="form-label" for="course_name"><strong>Course Code:</strong></label>
             <input type="text" class="form-control" name="course_name" required>
           </div>
           <div class="form-group my-2">
-            <label class="form-label" for="pdfFile">Choose a PDF file:</label>
+            <label class="form-label" for="pdfFile"><strong>Choose a PDF file:</strong> </label>
             <input type="file" class="form-control-file" id="pdfFile" name="pdfFile" required>
           </div>
           <div class="text-center m-3">
@@ -157,45 +127,45 @@ Academic
   </div>
 </div>
 <script>
-    function myFunction() {
-      // Get input element and filter value
-      var input, filter, ul, li, a, i, txtValue;
-      input = document.getElementById('myInput');
-      filter = input.value.toUpperCase();
-      ul = document.getElementById('sortable-list');
-      li = ul.getElementsByTagName('li');
+  function myFunction() {
+    // Get input element and filter value
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById('sortable-list');
+    li = ul.getElementsByTagName('li');
 
-      // Loop through all list items and hide those that don't match the search query
-      for (i = 0; i < li.length; i++) {
-        a = li[i];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = '';
-        } else {
-          li[i].style.display = 'none';
-        }
+    // Loop through all list items and hide those that don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i];
+      txtValue = a.textContent || a.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = '';
+      } else {
+        li[i].style.display = 'none';
       }
     }
-    function myFunction2() {
-      // Get input element and filter value
-      var input, filter, ul, li, a, i, txtValue;
-      input = document.getElementById('search_available');
-      filter = input.value.toUpperCase();
-      ul = document.getElementById('sortable-list2');
-      li = ul.getElementsByTagName('li');
+  }
+  function myFunction2() {
+    // Get input element and filter value
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('search_available');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById('sortable-list2');
+    li = ul.getElementsByTagName('li');
 
-      // Loop through all list items and hide those that don't match the search query
-      for (i = 0; i < li.length; i++) {
-        a = li[i];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = '';
-        } else {
-          li[i].style.display = 'none';
-        }
+    // Loop through all list items and hide those that don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i];
+      txtValue = a.textContent || a.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = '';
+      } else {
+        li[i].style.display = 'none';
       }
     }
-    
-  
-  </script>
+  }
+
+
+</script>
 {% endblock %}

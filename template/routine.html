@@ -7,137 +7,105 @@ routine
 {% include 'academic_header' %}
 
 <div class="row">
-  
+
   <div class="col-3 col_color p-3 text-center" style="height: auto;">
-    <input class="border-0 m-2 rounded-3" style="width: 100%;" type="text"
-      id="myInput"
-      onkeyup="myFunction()" placeholder="Search for Department..">
+    <input class="border-0 m-2 rounded-3" style="width: 100%;" type="text" id="myInput" onkeyup="myFunction()"
+      placeholder="Search for Department..">
     <ul class="list-unstyled text-start" id="sortable-list">
-      
-        {% for department_list in department_list %}
-        <li><a class="nav-link" href="#{{ department_list.department }} ">{{ department_list.department }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-    
-    <div class="col-9  p-3 text-center">
-      {% if request.user.is_superuser %}
-      <div class="text-end">
-        <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal"
-        data-bs-target="#add_routine">Add Routine</button>
+
+      {% for department_list in department_list %}
+      <li><a class="nav-link" href="#{{ department_list.department }} ">{{ department_list.department }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-9  p-3 text-center">
+    {% if request.user.is_superuser %}
+    <div class="text-end">
+      <button type="button" class="btn btn-sm btn-info mx-3" data-bs-toggle="modal" data-bs-target="#add_routine">Add
+        Routine</button>
     </div>
     {%endif%}
     {% if error_message %}
-          <p style="color: red;">Error: {{ error_message|upper }}</p>
+    <p style="color: red;">Error: {{ error_message|upper }}</p>
     {% endif %}
     {% for department_list in department_list %}
-    <div id="{{ department_list.department }}" class="card text-dark bg-light m-4"
-      style="max-width:100%; ">
+    <div id="{{ department_list.department }}" class="card text-dark bg-light m-4" style="max-width:100%; ">
       <div class="card-header d-inline-flex ">
         <div class="flex-fill">{{ department_list.department }}</div>
-  
+
       </div>
-  
+
       <div class="card m-4 p-3">
         <ul id="sortable-list2" class="list-group list-group-flush">
-        
-        {%for routine_list in routine_list%}
-        {% if department_list.department == routine_list.routine.department.department %}
+
+          {%for routine_list in routine_list%}
+          {% if department_list.department == routine_list.routine.department.department %}
           {% if routine_list.pdf_file.url %}
           <li class="list-group-item" style=" display: flex; list-style: none;
           justify-content: space-between; align-items: center; margin-right: 10px;">
-              <a href="{{ routine_list.pdf_file.url }}" target="_blank"> {{ routine_list.course_name }} {{ routine_list.routine.session_name }}</a>
-              <div style="display:flex; justify-content:space-between; align-items: center; ">
-                <form action="{% url 'delete_routine' %}" method="POST" enctype="multipart/form-data">
+            <a href="{{ routine_list.pdf_file.url }}" target="_blank"> {{ routine_list.semester }} 
+              {{routine_list.routine.session_name }}</a>
+            <div style="display:flex; justify-content:space-between; align-items: center; ">
+              <form action="{% url 'delete_routine' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="department_name" value="{{  department_list.department}}">
                 <input type="hidden" name="session" value="{{routine_list.routine.session_name }}">
-                
+                <input type="hidden" name="semester" value="{{routine_list.semester }}">
                 <button type="submit" class="btn btn-outline-danger mx-3">Delete</button>
-                </form>
-                <form action="{% url 'delete_routine' %}" method="POST" enctype="multipart/form-data">
+              </form>
+              <!-- <form action="{% url 'delete_routine' %}" method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
                   <input type="hidden" name="department_name" value="{{  department_list.department}}">
                 <input type="hidden" name="session" value="{{routine_list.routine.session_name }}">
-                <button type="submit" class="btn btn-outline-info mx-3"  data-bs-toggle="modal"
-                data-bs-target="#edit_routine">Edit</button>
-                </form>
-                <div class="modal fade" id="edit_routine" tabindex="-1"
-                aria-labelledby="addLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="addLabel">Add the Routine with session</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+                
+                </form> -->
 
-                      <form action="{% url 'add_routine' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                          <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
-                          <input type="text" class="form-control" name="department_name" value="{{  department_list.department}}">
-                        </div>
-                        <div class="form-group my-2">
-                          <label class="form-label" for="session"><strong>Session: </strong></label>
-                          <input type="text" class="form-control" name="session" value="{{routine_list.routine.session_name }}">
-                        </div>
-                        <div class="form-group my-2">
-                          <label class="form-label" for="pdfFile"><strong>Choose a PDF file: </strong></label>
-                          <input type="file" class="form-control-file" id="pdfFile" name="pdfFile"  value="{{ routine_list.pdf_file.url }}">
-                        </div>
-                        <div class="text-center m-3">
-                          <button type="submit" class="btn btn-primary">Edit</button>
-                        </div>
-
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              
-              </div>
-            </li>
+            </div>
+          </li>
           {%endif%}
-        {%endif%}
-       
-        {%endfor%}
+          {%endif%}
+
+          {%endfor%}
         </ul>
-       
-        
+
+
       </div>
     </div>
-  {% endfor %}
-  
+    {% endfor %}
+
   </div>
 </div>
 
 <!-- modal -->
-<div class="modal fade" id="add_routine" tabindex="-1"
-  aria-labelledby="addLabel" aria-hidden="true">
+<div class="modal fade" id="add_routine" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addLabel">Add the Routine with session</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"
-          aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
         <form action="{% url 'add_routine' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="mb-3">
-            <label for ='department_name' class="form-label"><strong>Department Name: </strong></label><a href="{% url 'new_dept' %}" target="_blank">New department</a>
+            <label for='department_name' class="form-label"><strong>Department Name: </strong></label><a
+              href="{% url 'new_dept' %}" target="_blank">New department</a>
 
             <select class="form-control" id="department_name" name="department_name">
               {% for dept in department_list %}
-                  <option value="{{dept.department}}">{{dept.department}}</option>
+              <option value="{{dept.department}}">{{dept.department}}</option>
               {% endfor %}
             </select>
           </div>
           <div class="form-group my-2">
             <label class="form-label" for="session"><strong>Session:</strong></label>
             <input type="text" class="form-control" name="session" required>
+          </div>
+          <div class="form-group my-2">
+            <label class="form-label" for="semester"><strong>Semester:</strong></label>
+            <input type="number" id="quantity" name="semester" min="1" max="8">
           </div>
           <div class="form-group my-2">
             <label class="form-label" for="pdfFile"><strong>Choose a PDF file:</strong></label>
@@ -153,45 +121,45 @@ routine
   </div>
 </div>
 <script>
-    function myFunction() {
-      // Get input element and filter value
-      var input, filter, ul, li, a, i, txtValue;
-      input = document.getElementById('myInput');
-      filter = input.value.toUpperCase();
-      ul = document.getElementById('sortable-list');
-      li = ul.getElementsByTagName('li');
+  function myFunction() {
+    // Get input element and filter value
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById('sortable-list');
+    li = ul.getElementsByTagName('li');
 
-      // Loop through all list items and hide those that don't match the search query
-      for (i = 0; i < li.length; i++) {
-        a = li[i];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = '';
-        } else {
-          li[i].style.display = 'none';
-        }
+    // Loop through all list items and hide those that don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i];
+      txtValue = a.textContent || a.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = '';
+      } else {
+        li[i].style.display = 'none';
       }
     }
-    function myFunction2() {
-      // Get input element and filter value
-      var input, filter, ul, li, a, i, txtValue;
-      input = document.getElementById('search_available');
-      filter = input.value.toUpperCase();
-      ul = document.getElementById('sortable-list2');
-      li = ul.getElementsByTagName('li');
+  }
+  function myFunction2() {
+    // Get input element and filter value
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('search_available');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById('sortable-list2');
+    li = ul.getElementsByTagName('li');
 
-      // Loop through all list items and hide those that don't match the search query
-      for (i = 0; i < li.length; i++) {
-        a = li[i];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = '';
-        } else {
-          li[i].style.display = 'none';
-        }
+    // Loop through all list items and hide those that don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i];
+      txtValue = a.textContent || a.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = '';
+      } else {
+        li[i].style.display = 'none';
       }
     }
-    
-  
-  </script>
+  }
+
+
+</script>
 {% endblock %}

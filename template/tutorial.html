@@ -14,8 +14,8 @@ tutorial
       onkeyup="myFunction()" placeholder="Search for Department..">
     <ul class="list-unstyled text-start" id="sortable-list">
       
-        {% for department_list in department_list %}
-        <li><a class="nav-link" href="#{{ department_list.department }} ">{{ department_list.department }}</a></li>
+        {% for dept in depts %}
+        <li><a class="nav-link" href="#{{ dept.department }} ">{{ dept.department }}</a></li>
         {% endfor %}
       </ul>
     </div>
