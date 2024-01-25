@@ -186,7 +186,7 @@ class TutorialView(View):
     
     def get(self, request):
         try:
-            tutorial_list=Tutorial.objects.all()
+            tutorial_list=Tutorial.objects.all().order_by('course_name')
             depts = Department.objects.all()
             tutorials = {}
             for tut in tutorial_list:

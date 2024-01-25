@@ -13,22 +13,24 @@
   z-index: -1;
 }
 </style>
-<div class="container-fluid text-center" style="height: fit-content;">
+<div class="container-fluid text-center " style="height: fit-content;">
     <img src="static/img/uni.jpg" style="filter: blur(5px); height: fit-content; width: 100%;">
-    <div class="mx-auto " style="background-color: #b7b7b77d; border: 1px solid rgb(164, 163, 163);
+    <div class="mx-auto my-5 py-5" style="background-color: #b7b7b77d; border: 1px solid rgb(164, 163, 163);
     font-family: Helvetica, Arial; width: 800px;">
         <h1 class="fw-bold my-5">Welcome to CCN Community</h1>
         <h3 class="my-3">Help and connect with everybody by exchanging yours need</h3>
         <span class="my-4">Seniors can upload their questions and books</span> <br>
         <span class="my-4">Juniors take help from your junior by fulfil your seeks</span>
+        {% if not user.is_authenticated %}
         <div class="m-5">
-            <ul>
+            <ul class="list-unstyled">
               <li>
-                <a  class="m-3 p-3 text-white" href="/login/"style="border: 2px solid white; text-decoration:none;">Admin</a>
-                <a class="m-3 p-3 text-white"href="/login/" style="border: 2px solid white; text-decoration:none;">Student</a>
+                <a  class="m-3 p-3" href="/login/"style="color:#a21631; border: 2px solid white; text-decoration:none;">Admin</a>
+                <a class="m-3 p-3"href="/login/" style="color:#a21631; border: 2px solid white; text-decoration:none;">Student</a>
               </li>
             </ul>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
