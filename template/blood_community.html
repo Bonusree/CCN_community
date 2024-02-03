@@ -42,7 +42,13 @@ CCN community
     <tbody>
       {% for blood in bloods %}
       <tr>
-        <td> {{blood.user_details.fullName}} </td>
+        <td>
+          {% if blood.user_details.fullName %}
+              {{ blood.user_details.fullName }}
+          {% else %}
+              {{ blood.user.username }}
+          {% endif %}
+         </td>
         <td>{{blood.blood_group}}</td>
         <td> {{blood.user_details.address}} </td>
         <td>{{blood.last_donate}}</td>

@@ -127,6 +127,7 @@ def add_routine(request):
 
         context = {'routine_list': routine_list, 'department_list': department_list,'error_message': str(e)}
         return render(request, 'routine.html', context)
+    
 @login_required
 def add_question(request):
     try:

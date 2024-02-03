@@ -23,16 +23,22 @@ def show_alumni(request):
     return render(request,'alumni.html',{'all_alumni':all_alumni})
 
 
+def delete_alumni(request, id):
+    user = User.objects.filter(id=id)
+    user.delete()
+    return redirect("alumni/")
+
 def login_view(request):
     if request.method=='POST':
         username = request.POST['username']
         password = request.POST['password']
         
         user = authenticate(request, username=username, password=password)
-        
         if user is not None:
-            # If user is authenticated, log them in
             login(request, user)
+            _user = User.objects.get(username=username)
+            request.session['is_superuser']=_user.is_superuser            
+            request.session['username']=_user.username            
             return redirect('home') 
         else:
             context ={'type':'bg-danger','message':'Invalid username or password'}
@@ -41,6 +47,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    request.session.clear()
     return redirect('home')
 
 def signup(request):
@@ -49,6 +56,7 @@ def signup(request):
         email = request.POST['email']
         password = request.POST['password']
         cpassword = request.POST['confirmPassword']
+        studentId = request.FILES.get('studentIdPhoto')
         
         # check password 
         if password!=cpassword:
@@ -66,8 +74,8 @@ def signup(request):
         new_user = User.objects.create_user(username=username, email=email, password=password)
         new_user.save()
         
-        User_Details.objects.create(user=User.objects.get(username=username))
-        Blood.objects.create(user=User.objects.get(username=username))
+        user_details = User_Details.objects.create(user=new_user, studentIdPhoto=studentId)
+        Blood.objects.create(user=new_user, user_details=user_details)
         
         context ={'type':'bg-success','message':'Successfully registered'}
         return render(request,'login.html',context=context)
@@ -123,3 +131,25 @@ def profile(request):
         user_details = None
     
     return render(request,'profile.html',context=context)
+
+def manage_user(request):
+    users = User_Details.objects.all()
+    return render(request,"manage_user.html", {'users':users})
+
+def delete(request, id):
+    user = User.objects.get(id=id)
+    _temp = Blood.objects.get(user=user)
+    _temp.delete()
+    _temp.save()
+    _temp = User_Details.objects.get(user=user)
+    _temp.delete()
+    _temp.save()
+    user.delete()
+    user.save()
+    return redirect("/manage-user/")
+
+def update_admin(request, id):
+    user = User.objects.get(id=id)
+    user.is_superuser ^=1
+    user.save()
+    return redirect("/manage-user/")

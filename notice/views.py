@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Notice
 from academic.models import Department
 from django.shortcuts import get_object_or_404
@@ -18,22 +18,17 @@ def add_notice(request):
 
         if title and category and pdf_file :
             # Create a new Notice instance and save it to the database
+            new_notice = Notice(
+                    title=title,
+                    category=category,
+                    pdf=pdf_file
+                )
             if department:
                 dept_id = Department.objects.get(department=department)
-                new_notice = Notice(
-                    title=title,
-                    category=category,
-                    department=dept_id,
-                    pdf=pdf_file
-                )
-            else:
-                new_notice = Notice(
-                    title=title,
-                    category=category,
-                    pdf=pdf_file
-                )
+                new_notice.department = dept_id
+                
             new_notice.save()
-        notice(request)
+        return redirect("/notice")
     depts = Department.objects.all()
     return render(request,'add_notice.html',{"depts":depts})
 
@@ -46,7 +41,7 @@ def notice(request):
 def delete_notice(request, notice_id):
     n = Notice.objects.filter(id=notice_id)
     n.delete()
-    return notice(request)
+    return redirect("/notice")
 
 def download_pdf(request, notice_id):
     notice = get_object_or_404(Notice, id=notice_id)

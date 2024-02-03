@@ -1,15 +1,11 @@
 {% extends "master.html" %}
 
 {% block title %}
-CCN community
+  CCN community
 {% endblock %}
 {% block head %}
 {{block.super}}
 <style>
-  body{
-      background-image: url(../static/img/alumni.jpg);
-      background-size: cover;
-  }
   select{
     background-color: transparent;
     outline: none;
@@ -43,26 +39,40 @@ CCN community
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Name</th>
                 <th>Session</th>
                 <th>Department</th>
-                <th>Profession</th>
-                <th>Email</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for alumni in all_alumni %}
+            {% for user in users %}
                 <tr>
                     <td>
-                      {% if alumni.fullName %}
-                          {{ alumni.fullName }}
+                      <img height="200" width="270" src="{{user.studentIdPhoto.url}}" alt="alter"> 
+                     </td>
+                    <td>
+                      {% if user.fullName %}
+                          {{ user.fullName }}
                       {% else %}
-                          {{ alumni.user.username }}
+                          {{ user.user.username }}
                       {% endif %}
-                      </td>
-                    <td>{{alumni.session}}</td>
-                    <td>{{alumni.department}}</td>
-                    <td>{{alumni.profession}}</td>
-                    <td>{{alumni.user.email}}</td>
+                    </td>
+                    <td>{{user.session}}</td>
+                    <td>{{user.department}}</td>
+                    <td class="align-middle">
+                        {% if request.session.username != user.user.username %}
+                        <a class="btn btn-danger" href="delete/{{user.id}}">Delete</a>
+                        {% if user.user.is_superuser %}
+                        <a class="btn btn-warning" href="update_admin/{{user.id}}">Admin -</a>
+                        {% else %}
+                        <a class="btn btn-info" href="update_admin/{{user.id}}">Admin +</a>
+                        {% endif %}
+                        {% else %}
+                        You can't do any action
+                        {% endif %}
+                        
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -96,8 +106,4 @@ CCN community
       }
     }
   </script>
-{% endblock %}
-
-{% block footer %}
-{{block.super}}
 {% endblock %}
