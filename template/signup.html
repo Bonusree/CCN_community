@@ -34,7 +34,7 @@ Sign Up
         <div class="col-md-6 mx-auto">
             <div class="form-container">
                 <h2 class="text-center">Registration</h2>
-                <form action="{% url 'signup' %}" method="post">
+                <form action="{% url 'signup' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         <label class="fw-bold" for="username">User name</label>
@@ -55,6 +55,11 @@ Sign Up
                         <label class="fw-bold" for="confirmPassword">Confirm Password</label>
                         <input type="password" class="form-control"
                             id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="fw-bold" for="studentIdPhoto">Student ID photo</label>
+                        <input type="file" class="form-control"
+                            id="studentIdPhoto" name="studentIdPhoto" required>
                     </div>
                     <div style="width: 100%; text-align: center;" >
                         <button type="submit" class="btn bg-linear">Signup</button>

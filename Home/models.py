@@ -10,6 +10,7 @@ class User_Details(models.Model):
     session = models.CharField(max_length=100,null=True)
     address = models.CharField(max_length=255,null=True)
     isAlumni = models.BooleanField(default=False)
+    studentIdPhoto = models.ImageField(upload_to='student_id_photos/', blank=True, null=True)
 
     def __str__(self):
         return self.user.username  # You can change this to display a relevant field
