@@ -133,7 +133,7 @@ def profile(request):
     return render(request,'profile.html',context=context)
 
 def manage_user(request):
-    users = User_Details.objects.all()
+    users = User_Details.objects.all().order_by("verified")
     return render(request,"manage_user.html", {'users':users})
 
 def delete(request, id):
@@ -152,4 +152,10 @@ def update_admin(request, id):
     user = User.objects.get(id=id)
     user.is_superuser ^=1
     user.save()
+    return redirect("/manage-user/")
+
+def approve_user(request, id):
+    user_details = User_Details.objects.get(id=id)
+    user_details.verified = True
+    user_details.save()
     return redirect("/manage-user/")

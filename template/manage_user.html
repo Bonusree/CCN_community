@@ -62,12 +62,14 @@
                     <td>{{user.department}}</td>
                     <td class="align-middle">
                         {% if request.session.username != user.user.username %}
-                        <a class="btn btn-danger" href="delete/{{user.id}}">Delete</a>
-                        {% if user.user.is_superuser %}
-                        <a class="btn btn-warning" href="update_admin/{{user.id}}">Admin -</a>
-                        {% else %}
-                        <a class="btn btn-info" href="update_admin/{{user.id}}">Admin +</a>
-                        {% endif %}
+                        <a class="btn btn-danger" href="delete/{{user.user.id}}">Delete</a>
+                          {% if user.user.is_superuser and user.verified %}
+                          <a class="btn btn-warning" href="update_admin/{{user.user.id}}">Admin -</a>
+                          {% elif user.verified %}
+                          <a class="btn btn-info" href="update_admin/{{user.user.id}}">Admin +</a>
+                          {% else %}
+                          <a class="btn btn-success" href="approve_user/{{user.id}}">Approve</a>
+                          {% endif %}
                         {% else %}
                         You can't do any action
                         {% endif %}

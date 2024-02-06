@@ -12,5 +12,6 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('manage-user/', views.manage_user, name='manage_user'),
     path('manage-user/delete/<int:id>', views.delete, name='user_delete'),
-    path('manage-user/update_admin/<int:id>', views.update_admin, name='update_admin')
+    path('manage-user/update_admin/<int:id>', views.update_admin, name='update_admin'),
+    path('manage-user/approve_user/<int:id>', views.approve_user, name='update_admin')
 ]

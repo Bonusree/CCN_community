@@ -23,6 +23,7 @@ def routine(request):
         return render(request, 'routine.html', context)
     except Exception as e:
         return HttpResponse(e)
+    
 def academic(request):
     try:
         syllabus_list=Syllabus.objects.all().order_by('syllabus')
@@ -33,7 +34,7 @@ def academic(request):
         context={'syllabus_list': syllabus_list, 'department_list':department_list}
         return render(request,'academic.html', context)
     except Exception as e:
-        return HttpResponse(e)
+        return HttpResponse(f"exception : {e}")
 
 def question_bank(request):
     try:
